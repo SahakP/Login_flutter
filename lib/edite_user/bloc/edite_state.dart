@@ -4,4 +4,7 @@ abstract class EditeState {}
 
 class EdiiteInitial extends EditeState {}
 
-class LastNameState extends EditeState {}
+class EditUserState extends EditeState {
+  User? user;
+  EditUserState({required this.user});
+}

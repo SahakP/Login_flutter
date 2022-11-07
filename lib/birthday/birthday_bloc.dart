@@ -16,7 +16,7 @@ class BirthdayBloc extends Bloc<BirthdayEvent, BirthdayState> {
   Future<void> _onBirthdayDataEvent(
       BirthdayDataEvent event, Emitter emit) async {
     emit(BirthdayDataState(
-        isDataValid: validRepo.birthdayValid(event.validDate),
+        isDataValid: validRepo.birthdayValidation(event.validDate),
         validDate: event.validDate));
   }
 }

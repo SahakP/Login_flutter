@@ -28,14 +28,55 @@ class EditeBloc extends Bloc<EditeEvent, EditeState> {
     final phone = event.phone;
     final email = event.email;
     var user = event.user;
+    final password = event.password;
 
     lastName.isNotEmpty
         ? {
-            if (validationRepo.nameValidation(lastName))
-              {user.setLastName(lastName)}
+            if (validationRepo.lastNameValidation(lastName))
+              {user.lastName = lastName}
           }
         : null;
 
-    emit(LastNameState());
+    firstName.isNotEmpty
+        ? {
+            if (validationRepo.firstNameValidation(firstName))
+              {user.firstName = firstName}
+          }
+        : null;
+    name.isNotEmpty
+        ? {
+            if (validationRepo.nameValidation(name))
+              {
+                if (await apiRepo.checkName(name))
+                  {
+                    user.name = name,
+                  }
+              }
+          }
+        : null;
+    phone.isNotEmpty
+        ? {
+            if (validationRepo.phoneValidation(phone))
+              {
+                if (await apiRepo.checkPhone(phone)) {user.phone = phone}
+              }
+          }
+        : null;
+    email.isNotEmpty
+        ? {
+            if (validationRepo.emailValidation(email))
+              {
+                if (await apiRepo.checkEmail(email)) {user.email = email}
+              }
+          }
+        : null;
+    password.isNotEmpty
+        ? {
+            if (validationRepo.passwordValidation(password))
+              {user.password = password}
+          }
+        : null;
+    await apiRepo.editUer(user);
+    emit(EditUserState(user: user));
   }
 }

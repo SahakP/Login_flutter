@@ -21,7 +21,7 @@ class EmailPhoneBloc extends Bloc<EmailPhoneEvent, EmailPhoneState> {
 
   Future<void> _onEmailEvent(EmailEvent event, Emitter emitter) async {
     if (await apiRepo.checkEmail(event.email) &&
-        validRepo.isEmailValid(event.email)) {
+        validRepo.emailValidation(event.email)) {
       emitter(EmailState(isEmailValid: true));
     } else {
       emitter(EmailState(isEmailValid: false));
@@ -30,7 +30,7 @@ class EmailPhoneBloc extends Bloc<EmailPhoneEvent, EmailPhoneState> {
 
   Future<void> _onPhoneEvent(PhoneEvent event, Emitter emitter) async {
     if (await apiRepo.checkPhone(event.phone) &&
-        validRepo.nameValidation(event.phone)) {
+        validRepo.phoneValidation(event.phone)) {
       emitter(PhoneState(isPhoneValid: true));
     } else {
       emitter(PhoneState(isPhoneValid: false));

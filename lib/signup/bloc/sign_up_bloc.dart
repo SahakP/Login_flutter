@@ -13,11 +13,11 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
 
   Future<void> _onFirstNameEvent(FirstNameEvent event, Emitter emitter) async {
     emitter(FiratNameState(
-        isFirstNameValid: validRepo.nameValidation(event.firstName)));
+        isFirstNameValid: validRepo.firstNameValidation(event.firstName)));
   }
 
   Future<void> _onLastNameEvent(LastNameEvent event, Emitter emitter) async {
     emitter(LastNameState(
-        isLastNameValid: validRepo.nameValidation(event.lastName)));
+        isLastNameValid: validRepo.lastNameValidation(event.lastName)));
   }
 }

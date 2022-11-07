@@ -287,7 +287,8 @@ class _EditePageState extends State<EditePage> {
                 name: naemController.text,
                 email: emailController.text,
                 phone: phoneController.text,
-                user: widget.user))));
+                user: widget.user,
+                password: passwordController.text))));
   }
 
   Widget _renderCancelButton() {
@@ -312,7 +313,8 @@ class _EditePageState extends State<EditePage> {
 
 extension _BlocListener on _EditePageState {
   void _listener(context, state) {
-    if (state is EditeState) {
+    if (state is EditUserState) {
+      widget.user = state.user!;
       Navigator.push(
           context,
           MaterialPageRoute(

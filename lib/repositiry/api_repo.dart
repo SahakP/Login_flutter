@@ -60,7 +60,7 @@ class ApiRepo {
     return user;
   }
 
-  Future<User> editeUer(User user) async {
+  Future<User> editUer(User user) async {
     final tokenPref = await SharedPreferences.getInstance();
     final token = tokenPref.getString('token');
 
@@ -86,11 +86,11 @@ class ApiRepo {
   }
 
   Future<bool> checkName(String name) async {
-    Uri? nameChackUrl = Uri.parse('${ApiConstant.baseUrl}/check/name');
+    Uri? nameCheckUrl = Uri.parse('${ApiConstant.baseUrl}/check/name');
     final body = jsonEncode({'name': name});
     Map<String, String>? header = {'Content-Type': 'application/json'};
 
-    final response = await http.post(nameChackUrl, headers: header, body: body);
+    final response = await http.post(nameCheckUrl, headers: header, body: body);
     if (response.statusCode == 200) {}
     // else{
     //   if(response.statusCode == 500){
