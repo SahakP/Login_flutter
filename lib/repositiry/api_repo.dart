@@ -60,6 +60,31 @@ class ApiRepo {
     return user;
   }
 
+  Future<User> editeUer(User user) async {
+    final tokenPref = await SharedPreferences.getInstance();
+    final token = tokenPref.getString('token');
+
+    Uri? editeUserUrl = Uri.parse('${ApiConstant.baseUrl}/editAccount');
+
+    Map<String, String>? header = {
+      'token': token!,
+      'Content-Type': 'application/json'
+    };
+    final body = jsonEncode({
+      'firstName': user.firstName,
+      'password': user.password,
+      'email': user.email,
+      'lastName': user.lastName,
+      'phone': user.phone,
+      'name': user.name,
+      'birthDate': user.birthday
+    });
+
+    final response = await http.post(editeUserUrl, headers: header, body: body);
+
+    return user;
+  }
+
   Future<bool> checkName(String name) async {
     Uri? nameChackUrl = Uri.parse('${ApiConstant.baseUrl}/check/name');
     final body = jsonEncode({'name': name});

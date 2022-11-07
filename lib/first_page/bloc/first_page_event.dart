@@ -6,3 +6,5 @@ class LogoutEvent extends FirstPageEvent {
   User user;
   LogoutEvent({required this.user});
 }
+
+class GoEditeEvent extends FirstPageEvent {}

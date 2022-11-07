@@ -2,9 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
-
 import 'package:localization/localization.dart';
+import 'package:provider/provider.dart';
 import 'package:snap_chat_copy/birthday/birthday_bloc.dart';
 import 'package:snap_chat_copy/email_phone/bloc/email_phone_screen.dart';
 import 'package:snap_chat_copy/notifier/change_notifier.dart';

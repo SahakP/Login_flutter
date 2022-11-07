@@ -5,3 +5,5 @@ abstract class FirstPageState {}
 class FirstPageInitial extends FirstPageState {}
 
 class LogoutState extends FirstPageState {}
+
+class GoEditeState extends FirstPageState {}

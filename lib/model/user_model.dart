@@ -1,3 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
+
 final now = DateTime.now();
 
 class User {
@@ -9,16 +11,52 @@ class User {
   String? name;
   DateTime? birthday;
 
-  User({
-    this.firstName,
-    this.lastName,
-    this.password,
-    this.email,
-    this.phone,
-    this.name,
-    this.birthday,
-  });
+  // User({
+  //   this.firstName,
+  //   this.lastName,
+  //   this.password,
+  //   this.email,
+  //   this.phone,
+  //   this.name,
+  //   this.birthday,
+  // });
 
+  set setLastName(String value) {
+    lastName = value;
+  }
+
+  set setFirstName(String name) {
+    firstName = name;
+  }
+
+  set setUserName(String _name) {
+    name = _name;
+  }
+
+  set setEmail(String _email) {
+    email = _email;
+  }
+
+  set setPassword(String pass) {
+    password = pass;
+  }
+
+  set setPhone(var _phone) {
+    phone = _phone;
+  }
+
+  set setBDay(DateTime bDay) {
+    birthday = birthday;
+    // DateFormat('dd MMMM yyyy').format(bDay);
+  }
+
+  String? get getlastName => lastName;
+  String? get getFirstName => firstName;
+  String? get getName => name;
+  String? get getEmail => email;
+  String? get getPassword => password;
+  String? get getPhone => phone;
+  String? get getBday => birthday.toString();
   @override
   String toString() {
     return 'User{name: $name,firstName: $firstName, lastName: $lastName,'

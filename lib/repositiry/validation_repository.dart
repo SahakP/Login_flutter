@@ -1,6 +1,6 @@
 class ValidationRepo {
-  bool nameValidation(String userName) {
-    return userName.isNotEmpty;
+  bool nameValidation(String name) {
+    return name.isNotEmpty;
   }
 
   bool passwordValidation(String password) {
