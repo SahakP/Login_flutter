@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:localization/localization.dart';
-import 'package:snap_chat_copy/edite_user/edite_screen.dart';
+import 'package:snap_chat_copy/edite_user/edit_screen.dart';
 import 'package:snap_chat_copy/widgets/header.dart';
 
 import '../model/user_model.dart';

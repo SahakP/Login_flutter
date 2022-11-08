@@ -1,20 +1,17 @@
-import 'dart:math';
-
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:localization/localization.dart';
+//import 'package:path/path.dart';
 import 'package:snap_chat_copy/first_page/first_page_screen.dart';
 import 'package:snap_chat_copy/repositiry/user_repo.dart';
 import 'package:snap_chat_copy/repositiry/validation_repository.dart';
-import 'package:snap_chat_copy/widgets/header.dart';
 
 import '../model/user_model.dart';
 import '../repositiry/api_repo.dart';
-import '../widgets/back_button.dart';
-import '../widgets/home.dart';
 import '../widgets/un_focused.dart';
-import 'bloc/edite_bloc.dart';
+import 'bloc/edit_bloc.dart';
 
 // ignore: must_be_immutable
 class EditePage extends StatefulWidget {
@@ -37,34 +34,29 @@ class _EditePageState extends State<EditePage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController birthdayController = TextEditingController();
-  late EditeBloc _bloc;
+  late EditBloc _bloc;
+  bool isLastNameValid = false;
 
   @override
   void initState() {
-    _bloc = EditeBloc(
+    _bloc = EditBloc(
         apiRepo: apiRepo, userRepo: userRepo, validationRepo: validationRepo);
     super.initState();
-  }
-
-  String get _validFormatDate {
-    final formatter = DateFormat('dd MMMM yyyy');
-    final birthday = formatter.format(widget.user.birthday!);
-    return birthday;
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
         create: (context) => _bloc,
-        child: BlocListener<EditeBloc, EditeState>(
+        child: BlocListener<EditBloc, EditState>(
           listener: _listener,
-          child: BlocBuilder<EditeBloc, EditeState>(
+          child: BlocBuilder<EditBloc, EditState>(
             builder: _render,
           ),
         ));
   }
 
-  Widget _render(BuildContext context, EditeState state) {
+  Widget _render(BuildContext context, EditState state) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: UnFocusedWidget(
@@ -74,12 +66,13 @@ class _EditePageState extends State<EditePage> {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
             _renderLastName(),
+            _renderLastNameErrorMsg(),
             _renderFirstName(),
+            _renderBDate(),
             _renderName(),
             _renderPhone(),
-            // _renderPassword(),
-            _renderEmail(),
-            //_renderBDate()
+            _renderPassword(),
+            _renderEmail()
           ]),
         )),
       ),
@@ -94,39 +87,6 @@ class _EditePageState extends State<EditePage> {
         ),
       ),
     );
-    //code
-
-//  resizeToAvoidBottomInset: true,
-//         backgroundColor: Colors.white,
-//         body: Stack(children: [
-//           const BackBtn(blueWhite: true),
-//           Padding(
-//             padding: const EdgeInsets.only(top: 100),
-//             child: SingleChildScrollView(
-//                 child: Column(
-//                     crossAxisAlignment: CrossAxisAlignment.start,
-//                     children: [
-//                   _renderLastName(),
-//                   _renderFirstName(),
-//                   _renderUsername(),
-//                   _renderPhone(),
-//                   _renderPassword(),
-//                   _renderEmail(),
-//                   _renderBDate()
-//                 ])),
-//           ),
-    //             const Expanded(
-    //               child: SizedBox(),
-    //             ),
-    //             Row(children: [
-    //               _renderSaveButton(),
-    //               const Expanded(child: SizedBox()),
-    //               _renderCAncelButton(),
-    //             ])
-    //           ]),
-    //     ),
-    //   )
-    // ]));
   }
 
   Widget _renderLastName() {
@@ -137,7 +97,9 @@ class _EditePageState extends State<EditePage> {
           TextField(
             // autofocus: true,
             controller: lastNameController,
-
+            onChanged: (value) {
+              _bloc.add(LastNameEvent(lastName: value));
+            },
             style: const TextStyle(
                 color: Colors.black, fontWeight: FontWeight.w800, fontSize: 16),
             decoration: InputDecoration(
@@ -148,26 +110,88 @@ class _EditePageState extends State<EditePage> {
     );
   }
 
-  // Widget _renderBDate() {
-  //   return Padding(
-  //     padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 10),
-  //     child: Column(
-  //       children: [
-  //         TextField(
-  //           // autofocus: true,
-  //           controller: birthdayController,
-  //           onChanged: (value) {},
-  //           style: const TextStyle(
-  //               color: Colors.black, fontWeight: FontWeight.w800, fontSize: 18),
-  //           decoration: const InputDecoration(
-  //               hintText: 'Birth date: ',
-  //               contentPadding:
-  //                   EdgeInsets.symmetric(horizontal: 0, vertical: 10)),
-  //         )
-  //       ],
-  //     ),
-  //   );
-  // }
+  Widget _renderLastNameErrorMsg() {
+    return !isLastNameValid
+        ? Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+            Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 60,
+                  vertical: 2,
+                ),
+                child: Text(
+                  'usernaemErrorMsg'.i18n(),
+                  style: const TextStyle(
+                      color: Color.fromARGB(255, 185, 193, 199),
+                      fontWeight: FontWeight.w700,
+                      fontSize: 12),
+                ))
+          ])
+        : const Text('');
+  }
+
+  Widget _renderBDate() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 10),
+      child: Column(
+        children: [
+          TextField(
+            // autofocus: true,
+            // controller: birthdayController,
+            // onChanged: (value) {},
+            onTap: () {
+              showCupertinoModalPopup(
+                  // barrierColor: Colors.white,
+                  context: context,
+                  builder: (_) => _renderDataPicker());
+            },
+            style: const TextStyle(
+                color: Colors.black, fontWeight: FontWeight.w800, fontSize: 18),
+            decoration: InputDecoration(
+              labelText: 'Birth date: ',
+              hintText:
+                  '${DateFormat('dd MMMM yyyy').format(widget.user.birthday!)}',
+
+              // hintText: '${widget.user.birthday.toString()}'
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _renderDataPicker() {
+    return Container(
+      height: 250,
+      color: Colors.white,
+      child: Padding(
+        padding: const EdgeInsets.only(
+          left: 40,
+          right: 40,
+          bottom: 10,
+          top: 10,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            SizedBox(
+              height: 150,
+              child: CupertinoDatePicker(
+                mode: CupertinoDatePickerMode.date,
+                onDateTimeChanged: (value) {
+                  // widget.user.birthday = value;
+                  _bloc.add(BirthdayEvent(birthday: value.toString()));
+                },
+                initialDateTime: DateTime(now.year - 16, now.month, now.day),
+              ),
+            ),
+            TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('OK')),
+          ],
+        ),
+      ),
+    );
+  }
 
   Widget _renderFirstName() {
     return Padding(
@@ -247,26 +271,24 @@ class _EditePageState extends State<EditePage> {
     );
   }
 
-  // Widget _renderPassword() {
-  //   return Padding(
-  //     padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 10),
-  //     child: Column(
-  //       children: [
-  //         TextField(
-  //           // autofocus: true,
-  //           controller: passwordController,
-  //           onChanged: (value) {},
-  //           style: const TextStyle(
-  //               color: Colors.black, fontWeight: FontWeight.w800, fontSize: 18),
-  //           decoration: const InputDecoration(
-  //               labelText: 'Password: ',
-  //               contentPadding:
-  //                   EdgeInsets.symmetric(horizontal: 0, vertical: 10)),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
+  Widget _renderPassword() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 10),
+      child: Column(
+        children: [
+          TextField(
+            // autofocus: true,
+            controller: passwordController,
+            onChanged: (value) {},
+            style: const TextStyle(
+                color: Colors.black, fontWeight: FontWeight.w800, fontSize: 18),
+            decoration: InputDecoration(
+                labelText: 'Password', hintText: '${widget.user.password}'),
+          ),
+        ],
+      ),
+    );
+  }
 
   Widget _renderSaveButton() {
     return ConstrainedBox(
@@ -281,14 +303,17 @@ class _EditePageState extends State<EditePage> {
             ),
             style: ElevatedButton.styleFrom(
                 backgroundColor: const Color.fromARGB(255, 36, 174, 252)),
-            onPressed: () => _bloc.add(LastNameEvent(
-                lastName: lastNameController.text,
-                firstName: firstNameController.text,
-                name: naemController.text,
-                email: emailController.text,
-                phone: phoneController.text,
-                user: widget.user,
-                password: passwordController.text))));
+            onPressed: () => _bloc.add(EditUserEvent(
+                  lastName: lastNameController.text,
+                  firstName: firstNameController.text,
+                  name: naemController.text,
+                  email: emailController.text,
+                  phone: phoneController.text,
+                  user: widget.user,
+                  password: passwordController.text,
+                  birthday: birthdayController.text,
+                  // DateTime.parse(birthdayController.text),
+                ))));
   }
 
   Widget _renderCancelButton() {
@@ -305,7 +330,9 @@ class _EditePageState extends State<EditePage> {
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color.fromARGB(255, 185, 193, 199),
         ),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
       ),
     );
   }
@@ -321,6 +348,15 @@ extension _BlocListener on _EditePageState {
               builder: (context) => FirstPage(
                     user: widget.user,
                   )));
+    }
+    if (state is BirthdayState) {
+      widget.user.birthday = DateTime.parse(state.birthday!);
+    }
+    if (state is BackUserEditState) {
+      Navigator.of(context).pop();
+    }
+    if (state is LastNameState) {
+      isLastNameValid = state.lastNameValid;
     }
   }
 }
