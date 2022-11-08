@@ -8,3 +8,5 @@ class LogoutEvent extends FirstPageEvent {
 }
 
 class GoEditeEvent extends FirstPageEvent {}
+
+class DeleteEvent extends FirstPageEvent {}

@@ -345,7 +345,9 @@ class _FirstPageState extends State<FirstPage> {
             height: 90,
             width: 90,
             child: TextButton(
-              onPressed: () {},
+              onPressed: () {
+                _bloc.add(DeleteEvent());
+              },
               child: const Text(
                 'DELETE',
                 style: TextStyle(color: Colors.black),
@@ -369,6 +371,12 @@ extension _BlocListener on _FirstPageState {
           context,
           MaterialPageRoute(
               builder: (context) => EditePage(user: widget.user)));
+    }
+    if (state is DeleteState) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => const HomePage()));
+      // Fluttertoast.showToast(msg: 'User deleted', gravity: ToastGravity.CENTER);
+      print('****************\n************\n');
     }
   }
 }

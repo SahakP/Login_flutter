@@ -15,16 +15,30 @@ class FirstPageBloc extends Bloc<FirstPageEvent, FirstPageState> {
   FirstPageBloc() : super(FirstPageInitial()) {
     on<LogoutEvent>(_LogoutEvent);
     on<GoEditeEvent>(_EditeEvent);
+    on<DeleteEvent>(_DeleteEvent);
   }
 
   Future<void> _LogoutEvent(LogoutEvent event, Emitter emit) async {
     final tokenPref = await SharedPreferences.getInstance();
     final token = tokenPref.remove('token');
-    await userRepo.getUser(event.user.name!, event.user.password!);
+    //await userRepo.getUser(event.user.name!, event.user.password!);
     emit(LogoutState());
   }
 
   Future<void> _EditeEvent(GoEditeEvent event, Emitter emirt) async {
     emit(GoEditeState());
+  }
+
+  Future<void> _DeleteEvent(DeleteEvent event, Emitter emit) async {
+    final tokenPref = await SharedPreferences.getInstance();
+
+    User? user;
+    user = await apiRepo.getUser();
+    if (user != null) {
+      await apiRepo.deleteUser();
+      final token = tokenPref.remove('token');
+      userRepo.delete(user.name!);
+    }
+    emit(DeleteState());
   }
 }

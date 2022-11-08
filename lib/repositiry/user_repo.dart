@@ -19,4 +19,9 @@ class UserRepo {
       return User.fromMap(user.first);
     }
   }
+
+  Future<void> delete(String name) async {
+    await userDB.userdb!.delete('users', where: 'name=?', whereArgs: [name]);
+  }
 }
+// 

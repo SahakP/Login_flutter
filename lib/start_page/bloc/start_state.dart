@@ -9,3 +9,5 @@ class IsRegState extends StartState {
   User? user;
   IsRegState({required this.isReg, required this.user});
 }
+
+class NoUserState extends StartState {}

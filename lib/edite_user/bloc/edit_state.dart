@@ -9,12 +9,12 @@ class EditUserState extends EditState {
   EditUserState({required this.user});
 }
 
+class CancelState extends EditState {}
+
 class BirthdayState extends EditState {
   String? birthday;
   BirthdayState({required this.birthday});
 }
-
-class BackUserEditState extends EditState {}
 
 class LastNameState extends EditState {
   bool lastNameValid;

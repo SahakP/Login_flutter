@@ -11,7 +11,7 @@ class EditUserEvent extends EditEvent {
   String email;
   String birthday;
   User user;
-  
+
   EditUserEvent(
       {required this.lastName,
       required this.phone,
@@ -28,9 +28,11 @@ class BirthdayEvent extends EditEvent {
   BirthdayEvent({required this.birthday});
 }
 
-class BackUserEditEvent extends EditEvent {}
+//class BackUserEditEvent extends EditEvent {}
 
 class LastNameEvent extends EditEvent {
   String? lastName;
   LastNameEvent({required this.lastName});
 }
+
+class CancelEvent extends EditEvent {}

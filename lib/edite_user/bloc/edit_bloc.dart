@@ -20,7 +20,7 @@ class EditBloc extends Bloc<EditEvent, EditState> {
   }) : super(EdiiteInitial()) {
     on<EditUserEvent>(_EditUserEvent);
     on<BirthdayEvent>(_BirthdayEvent);
-    on<BackUserEditEvent>(_BackUserEditEvent);
+    on<CancelEvent>(_CancelEvent);
     on<LastNameEvent>(_LastNameEvent);
   }
 
@@ -32,8 +32,13 @@ class EditBloc extends Bloc<EditEvent, EditState> {
     }
   }
 
-  Future<void> _BackUserEditEvent(BackUserEditEvent event, Emitter emit) async {
-    emit(BackUserEditState());
+  Future<void> _CancelEvent(CancelEvent event, Emitter emit) async {
+    User? user;
+    user = await apiRepo.getUser();
+    if (user != null) {
+      await apiRepo.deleteUser();
+    }
+    emit(CancelState());
   }
 
   Future<void> _BirthdayEvent(BirthdayEvent event, Emitter emit) async {

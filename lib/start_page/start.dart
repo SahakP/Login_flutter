@@ -52,10 +52,11 @@ extension _BlocListener on _StartPageState {
                 builder: (context) => FirstPage(
                       user: user!,
                     )));
-      } else {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const HomePage()));
       }
+    }
+    if (state is NoUserState) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => const HomePage()));
     }
   }
 }

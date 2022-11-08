@@ -2,11 +2,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+// 'package:fluttertoast/fluttertoast.dart';
 import 'package:localization/localization.dart';
 //import 'package:path/path.dart';
 import 'package:snap_chat_copy/first_page/first_page_screen.dart';
 import 'package:snap_chat_copy/repositiry/user_repo.dart';
 import 'package:snap_chat_copy/repositiry/validation_repository.dart';
+import 'package:snap_chat_copy/widgets/home.dart';
 
 import '../model/user_model.dart';
 import '../repositiry/api_repo.dart';
@@ -82,7 +84,7 @@ class _EditePageState extends State<EditePage> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             _renderSaveButton(),
-            _renderCancelButton(),
+            _renderDeleteButton(),
           ],
         ),
       ),
@@ -316,7 +318,7 @@ class _EditePageState extends State<EditePage> {
                 ))));
   }
 
-  Widget _renderCancelButton() {
+  Widget _renderDeleteButton() {
     return ConstrainedBox(
       constraints: const BoxConstraints.tightFor(width: 120, height: 50),
       child: ElevatedButton(
@@ -331,7 +333,7 @@ class _EditePageState extends State<EditePage> {
           backgroundColor: const Color.fromARGB(255, 185, 193, 199),
         ),
         onPressed: () {
-          Navigator.of(context).pop();
+          _bloc.add(CancelEvent());
         },
       ),
     );
@@ -352,8 +354,12 @@ extension _BlocListener on _EditePageState {
     if (state is BirthdayState) {
       widget.user.birthday = DateTime.parse(state.birthday!);
     }
-    if (state is BackUserEditState) {
+    if (state is CancelState) {
       Navigator.of(context).pop();
+      // Navigator.push(
+      //     context, MaterialPageRoute(builder: (context) => const HomePage()));
+      // // Fluttertoast.showToast(msg: 'User deleted', gravity: ToastGravity.CENTER);
+      // print('****************\n************\n');
     }
     if (state is LastNameState) {
       isLastNameValid = state.lastNameValid;

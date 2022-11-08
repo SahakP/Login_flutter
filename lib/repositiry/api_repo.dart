@@ -166,4 +166,16 @@ class ApiRepo {
     }
     return user;
   }
+
+  Future<void> deleteUser() async {
+    final tokenPref = await SharedPreferences.getInstance();
+    final token = tokenPref.getString('token');
+    Uri? deleteUri = Uri.parse('${ApiConstant.baseUrl}/delete/user');
+
+    Map<String, String>? header = {'token': token!};
+    final response = await http.delete(deleteUri, headers: header);
+    if (response.statusCode == 200) {
+      tokenPref.remove(token);
+    }
+  }
 }
