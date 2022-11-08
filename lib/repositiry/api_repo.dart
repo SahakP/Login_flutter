@@ -60,7 +60,7 @@ class ApiRepo {
     return user;
   }
 
-  Future<User> editUer(User user) async {
+  Future<User?> editUer(User user) async {
     final tokenPref = await SharedPreferences.getInstance();
     final token = tokenPref.getString('token');
 
@@ -77,12 +77,15 @@ class ApiRepo {
       'lastName': user.lastName,
       'phone': user.phone,
       'name': user.name,
-      'birthDate': user.birthday
+      'birthDate': user.birthday.toString()
     });
 
     final response = await http.post(editeUserUrl, headers: header, body: body);
-
-    return user;
+    if (response.statusCode == 200) {
+      return user;
+    } else {
+      return null;
+    }
   }
 
   Future<bool> checkName(String name) async {

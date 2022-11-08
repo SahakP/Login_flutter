@@ -99,9 +99,12 @@ class EditBloc extends Bloc<EditEvent, EditState> {
           }
         : null;
     birthday.toString().isNotEmpty
-        ? {if (validationRepo.birthdayValidation(DateTime.parse(birthday))) {}}
+        ? {
+            if (validationRepo.birthdayValidation(DateTime.parse(birthday)))
+              {user.birthday = DateTime.parse(birthday)}
+          }
         : null;
-    await apiRepo.editUer(user);
+    final response = await apiRepo.editUer(user);
     emit(EditUserState(user: user));
   }
 }
