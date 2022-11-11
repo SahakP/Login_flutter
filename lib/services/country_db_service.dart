@@ -1,6 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 
-import '../repositiry/api_repo.dart';
+import 'api_service.dart';
 
 class CountriesDataBase {
   static final CountriesDataBase countriesDataBase =
@@ -26,7 +26,7 @@ class CountriesDataBase {
     } catch (e) {}
     final countries = await countryDB!.query('countries');
     if (countries.isEmpty) {
-      final countries = await ApiRepo().loadCountries();
+      final countries = await ApiService().loadCountries();
       countries.forEach((country) {
         countryDB!.insert(
           'countries',

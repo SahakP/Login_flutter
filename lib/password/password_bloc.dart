@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:snap_chat_copy/repositiry/api_repo.dart';
+import 'package:snap_chat_copy/services/api_service.dart';
 import 'package:snap_chat_copy/repositiry/user_repo.dart';
 import 'package:snap_chat_copy/repositiry/validation_repository.dart';
 
@@ -22,7 +22,7 @@ class PasswordBloc extends Bloc<PasswordEvent, PasswordState> {
 
   Future<void> _onPassDbEvent(PassDbEvent event, Emitter emitter) async {
     UserRepo().createUser(event.user);
-    ApiRepo().addUser(event.user);
+    ApiService().addUser(event.user);
     emitter(PassDbState(user: event.user));
   }
 }

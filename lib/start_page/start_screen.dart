@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:snap_chat_copy/repositiry/api_repo.dart';
+import 'package:snap_chat_copy/services/api_service.dart';
 import 'package:snap_chat_copy/start_page/bloc/start_bloc.dart';
-import 'package:snap_chat_copy/widgets/home.dart';
+import 'package:snap_chat_copy/utill/home.dart';
 
 import '../first_page/first_page_screen.dart';
 
@@ -15,7 +15,7 @@ class StartPage extends StatefulWidget {
 
 class _StartPageState extends State<StartPage> {
   final _bloc = StartBloc();
-  ApiRepo apiRepo = ApiRepo();
+  ApiService apiRepo = ApiService();
 
   @override
   void initState() {

@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:localization/localization.dart';
 import 'package:snap_chat_copy/edite_user/edit_screen.dart';
-import 'package:snap_chat_copy/widgets/header.dart';
+import 'package:snap_chat_copy/utill/header.dart';
 
 import '../model/user_model.dart';
-import '../widgets/home.dart';
+import '../utill/home.dart';
 import 'bloc/first_page_bloc.dart';
 
 // ignore: must_be_immutable
@@ -41,47 +41,50 @@ class _FirstPageState extends State<FirstPage> {
 
   Widget _render(BuildContext context, FirstPageState state) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      backgroundColor: Colors.white,
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              Row(children: [
-                const Expanded(child: SizedBox()),
-                Header(
-                  header: 'Welcome'.i18n(),
+        resizeToAvoidBottomInset: true,
+        backgroundColor: Colors.white,
+        body: Stack(
+          children: [
+            Column(
+              children: [
+                Row(children: [
+                  const Expanded(child: SizedBox()),
+                  Header(
+                    header: 'Welcome'.i18n(),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 40, left: 100),
+                    child: _renderLogOutButton(),
+                  ),
+                ]),
+                _renderLastName(),
+                _renderFirstName(),
+                _renderUsername(),
+                _renderPhone(),
+                _renderPassword(),
+                _renderEmail(),
+                _renderBDate(),
+                const Expanded(
+                  child: SizedBox(),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 40, left: 100),
-                  child: _renderLogOutButton(),
-                ),
-              ]),
-              _renderLastName(),
-              _renderFirstName(),
-              _renderUsername(),
-              _renderPhone(),
-              _renderPassword(),
-              _renderEmail(),
-              _renderBDate(),
-              const Expanded(
-                child: SizedBox(),
-              ),
-              Row(children: [
-                _renderEditeButton(),
-                const Expanded(child: SizedBox()),
-                _renderDeleteButton(),
-              ])
-            ],
-          ),
-        ],
-      ),
-    );
+              ],
+            ),
+          ],
+        ),
+        bottomNavigationBar: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _renderEditeButton(),
+                  // const Expanded(child: SizedBox()),
+                  _renderDeleteButton(),
+                ])));
   }
 
   Widget _renderLastName() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 5),
       child: Align(
         alignment: Alignment.topLeft,
         child: Text(
@@ -95,7 +98,7 @@ class _FirstPageState extends State<FirstPage> {
 
   Widget _renderBDate() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 5),
       child: Align(
         alignment: Alignment.topLeft,
         child: Text(
@@ -109,7 +112,7 @@ class _FirstPageState extends State<FirstPage> {
 
   Widget _renderFirstName() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 5),
       child: Align(
         alignment: Alignment.topLeft,
         child: Text(
@@ -118,36 +121,12 @@ class _FirstPageState extends State<FirstPage> {
               color: Colors.black, fontWeight: FontWeight.w800, fontSize: 18),
         ),
       ),
-
-      // child: Column(
-      //   children: [
-      //     Padding(
-      //         padding: const EdgeInsets.symmetric(
-      //           horizontal: 40,
-      //           vertical: 0,
-      //         ),
-      //         child: TextField(
-      //           readOnly: true,
-      //           // autofocus: true,
-      //           // controller: controllerUsername,
-      //           onChanged: (value) {},
-      //           style: const TextStyle(
-      //               color: Colors.black,
-      //               fontWeight: FontWeight.w800,
-      //               fontSize: 16),
-      //           decoration: InputDecoration(
-      //               hintText: 'First name: ' + widget.user.firstName!,
-      //               contentPadding: const EdgeInsets.symmetric(
-      //                   horizontal: 0, vertical: 10)),
-      //         )),
-      //   ],
-      // ),
     );
   }
 
   Widget _renderEmail() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 5),
       child: Align(
         alignment: Alignment.topLeft,
         child: Text(
@@ -156,35 +135,12 @@ class _FirstPageState extends State<FirstPage> {
               color: Colors.black, fontWeight: FontWeight.w800, fontSize: 18),
         ),
       ),
-      // child: Column(
-      //   children: [
-      //     Padding(
-      //         padding: const EdgeInsets.symmetric(
-      //           horizontal: 40,
-      //           vertical: 0,
-      //         ),
-      //         child: TextField(
-      //           readOnly: true,
-      //           // autofocus: true,
-      //           // controller: controllerUsername,
-      //           onChanged: (value) {},
-      //           style: const TextStyle(
-      //               color: Colors.black,
-      //               fontWeight: FontWeight.w800,
-      //               fontSize: 16),
-      //           decoration: InputDecoration(
-      //               hintText: 'Email: ' + widget.user.email!,
-      //               contentPadding: const EdgeInsets.symmetric(
-      //                   horizontal: 0, vertical: 10)),
-      //         )),
-      //   ],
-      // ),
     );
   }
 
   Widget _renderPhone() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 5),
       child: Align(
         alignment: Alignment.topLeft,
         child: Text(
@@ -193,36 +149,12 @@ class _FirstPageState extends State<FirstPage> {
               color: Colors.black, fontWeight: FontWeight.w800, fontSize: 18),
         ),
       ),
-
-      // child: Column(
-      //   children: [
-      //     Padding(
-      //         padding: const EdgeInsets.symmetric(
-      //           horizontal: 40,
-      //           vertical: 0,
-      //         ),
-      //         child: TextField(
-      //           readOnly: true,
-      //           // autofocus: true,
-      //           // controller: controllerUsername,
-      //           onChanged: (value) {},
-      //           style: const TextStyle(
-      //               color: Colors.black,
-      //               fontWeight: FontWeight.w800,
-      //               fontSize: 16),
-      //           decoration: InputDecoration(
-      //               hintText: 'Phone number: ' + widget.user.phone!,
-      //               contentPadding: const EdgeInsets.symmetric(
-      //                   horizontal: 0, vertical: 10)),
-      //         )),
-      //   ],
-      // ),
     );
   }
 
   Widget _renderUsername() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 5),
       child: Align(
         alignment: Alignment.topLeft,
         child: Text(
@@ -231,35 +163,12 @@ class _FirstPageState extends State<FirstPage> {
               color: Colors.black, fontWeight: FontWeight.w800, fontSize: 18),
         ),
       ),
-      // child: Column(
-      //   children: [
-      //     Padding(
-      //         padding: const EdgeInsets.symmetric(
-      //           horizontal: 40,
-      //           vertical: 0,
-      //         ),
-      //         child: TextField(
-      //           readOnly: true,
-      //           // autofocus: true,
-      //           // controller: controllerUsername,
-      //           onChanged: (value) {},
-      //           style: const TextStyle(
-      //               color: Colors.black,
-      //               fontWeight: FontWeight.w800,
-      //               fontSize: 16),
-      //           decoration: InputDecoration(
-      //               hintText: 'Usernaem: ' + widget.user.name!,
-      //               contentPadding: const EdgeInsets.symmetric(
-      //                   horizontal: 0, vertical: 10)),
-      //         )),
-      //   ],
-      // ),
     );
   }
 
   Widget _renderPassword() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 5),
       child: Align(
         alignment: Alignment.topLeft,
         child: Text(
@@ -268,29 +177,6 @@ class _FirstPageState extends State<FirstPage> {
               color: Colors.black, fontWeight: FontWeight.w800, fontSize: 18),
         ),
       ),
-      // child: Column(
-      //   children: [
-      //     Padding(
-      //         padding: const EdgeInsets.symmetric(
-      //           horizontal: 40,
-      //           vertical: 0,
-      //         ),
-      //         child: TextField(
-      //           readOnly: true,
-      //           // autofocus: true,
-      //           // controller: controllerUsername,
-      //           onChanged: (value) {},
-      //           style: const TextStyle(
-      //               color: Colors.black,
-      //               fontWeight: FontWeight.w800,
-      //               fontSize: 16),
-      //           decoration: InputDecoration(
-      //               hintText: 'Password: ' + widget.user.password!,
-      //               contentPadding: const EdgeInsets.symmetric(
-      //                   horizontal: 0, vertical: 10)),
-      //         )),
-      //   ],
-      // ),
     );
   }
 
@@ -303,58 +189,41 @@ class _FirstPageState extends State<FirstPage> {
   }
 
   Widget _renderEditeButton() {
-    return Align(
-      alignment: Alignment.topLeft,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 30,
-          vertical: 30,
-        ),
-        child: Container(
-          height: 50,
-          width: 120,
-          decoration: BoxDecoration(
-              color: Colors.orange, borderRadius: BorderRadius.circular(20)),
-          child: SizedBox(
-            height: 90,
-            width: 90,
-            child: TextButton(
-              onPressed: () => _bloc.add(GoEditeEvent()),
-              child: const Text('EDITE', style: TextStyle(color: Colors.black)),
-            ),
+    return ConstrainedBox(
+      constraints: const BoxConstraints.tightFor(width: 120, height: 50),
+      child: ElevatedButton(
+        child: const Text(
+          'EDITE',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 15.0,
           ),
         ),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color.fromARGB(255, 36, 174, 252),
+        ),
+        onPressed: () => _bloc.add(GoEditeEvent()),
       ),
     );
   }
 
   Widget _renderDeleteButton() {
-    return Align(
-      alignment: Alignment.topLeft,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 30,
-          vertical: 10,
-        ),
-        child: Container(
-          height: 50,
-          width: 120,
-          decoration: BoxDecoration(
-              color: Colors.red, borderRadius: BorderRadius.circular(20)),
-          child: SizedBox(
-            height: 90,
-            width: 90,
-            child: TextButton(
-              onPressed: () {
-                _bloc.add(DeleteEvent());
-              },
-              child: const Text(
-                'DELETE',
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
+    return ConstrainedBox(
+      constraints: const BoxConstraints.tightFor(width: 120, height: 50),
+      child: ElevatedButton(
+        child: const Text(
+          'DELETE',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 15.0,
           ),
         ),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color.fromARGB(255, 185, 193, 199),
+        ),
+        onPressed: () {
+          _bloc.add(DeleteEvent());
+        },
       ),
     );
   }
@@ -376,7 +245,7 @@ extension _BlocListener on _FirstPageState {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => const HomePage()));
       // Fluttertoast.showToast(msg: 'User deleted', gravity: ToastGravity.CENTER);
-      print('****************\n************\n');
+
     }
   }
 }

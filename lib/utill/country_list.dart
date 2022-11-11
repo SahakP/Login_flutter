@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:snap_chat_copy/notifier/change_notifier.dart';
-import 'package:snap_chat_copy/widgets/back_button.dart';
-import 'package:snap_chat_copy/widgets/rend_country_show_list.dart';
-import 'package:snap_chat_copy/widgets/un_focused.dart';
+import 'package:snap_chat_copy/utill/back_button.dart';
+import 'package:snap_chat_copy/utill/rend_country_show_list.dart';
+import 'package:snap_chat_copy/utill/un_focused.dart';
 
 import '../model/country_model.dart';
 

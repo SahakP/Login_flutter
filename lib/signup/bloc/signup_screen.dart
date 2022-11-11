@@ -3,13 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:localization/localization.dart';
 import 'package:snap_chat_copy/repositiry/validation_repository.dart';
 import 'package:snap_chat_copy/signup/bloc/sign_up_bloc.dart';
-import 'package:snap_chat_copy/widgets/back_button.dart';
-import 'package:snap_chat_copy/widgets/button_submit.dart';
-import 'package:snap_chat_copy/widgets/header.dart';
-import 'package:snap_chat_copy/widgets/un_focused.dart';
+import 'package:snap_chat_copy/utill/back_button.dart';
+import 'package:snap_chat_copy/utill/button_submit.dart';
+import 'package:snap_chat_copy/utill/header.dart';
+import 'package:snap_chat_copy/utill/un_focused.dart';
 
 import '../../birthday/birthday_screen.dart';
 import '../../model/user_model.dart';
+import '../../utill/exepshon_map.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -40,7 +41,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   // }
 
   final _bloc = SignUpBloc(validRepo: ValidationRepo());
-
+  var expMsg = ExpMap().expMsg;
   bool firstNameValid = false;
   bool lastNaemValid = false;
 
@@ -93,24 +94,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Widget _renderFirstNameErrorMsg() {
-    if (!firstNameValid) {
-      return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-        Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 60,
-              vertical: 2,
-            ),
-            child: Text(
-              'usernaemErrorMsg'.i18n(),
-              style: const TextStyle(
-                  color: Color.fromARGB(255, 185, 193, 199),
-                  fontWeight: FontWeight.w700,
-                  fontSize: 12),
-            ))
-      ]);
-    } else {
-      return const Text('');
-    }
+    return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+      Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 60,
+            vertical: 2,
+          ),
+          child: Text(
+            !firstNameValid ? expMsg['firstName']! : '',
+            style: const TextStyle(
+                color: Color.fromARGB(255, 185, 193, 199),
+                fontWeight: FontWeight.w700,
+                fontSize: 12),
+          ))
+    ]);
   }
 
   Widget _renderFirstNameTF() {
@@ -138,24 +135,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Widget _renderLastNameErrorMsg() {
-    if (!lastNaemValid) {
-      return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-        Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 60,
-              vertical: 2,
-            ),
-            child: Text(
-              'usernaemErrorMsg'.i18n(),
-              style: const TextStyle(
-                  color: Color.fromARGB(255, 185, 193, 199),
-                  fontWeight: FontWeight.w700,
-                  fontSize: 12),
-            ))
-      ]);
-    } else {
-      return const Text('');
-    }
+    return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+      Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 60,
+            vertical: 2,
+          ),
+          child: Text(
+            !lastNaemValid ? expMsg['lastName']! : '',
+            style: const TextStyle(
+                color: Color.fromARGB(255, 185, 193, 199),
+                fontWeight: FontWeight.w700,
+                fontSize: 12),
+          ))
+    ]);
   }
 
   Widget _renderLastNameTF() {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:localization/localization.dart';
-import 'package:snap_chat_copy/start_page/start.dart';
+import 'package:snap_chat_copy/start_page/start_screen.dart';
 
 void main() async {
   runApp(

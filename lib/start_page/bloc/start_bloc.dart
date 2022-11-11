@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:snap_chat_copy/repositiry/api_repo.dart';
+import 'package:snap_chat_copy/services/api_service.dart';
 
 import '../../model/user_model.dart';
 
@@ -17,9 +17,10 @@ class StartBloc extends Bloc<StartEvent, StartState> {
     final token = tokenPref.getString('token');
 
     if (token != null) {
-      User? user = await ApiRepo().getUser();
+      User? user = await ApiService().getUser();
       emit(IsRegState(isReg: true, user: user));
+    } else {
+      emit(NoUserState());
     }
-    emit(NoUserState());
   }
 }

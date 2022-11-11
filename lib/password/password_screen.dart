@@ -5,12 +5,14 @@ import 'package:snap_chat_copy/model/user_model.dart';
 import 'package:snap_chat_copy/password/password_bloc.dart';
 import 'package:snap_chat_copy/repositiry/user_repo.dart';
 import 'package:snap_chat_copy/repositiry/validation_repository.dart';
-import 'package:snap_chat_copy/widgets/back_button.dart';
-import 'package:snap_chat_copy/widgets/button_submit.dart';
-import 'package:snap_chat_copy/widgets/header.dart';
-import 'package:snap_chat_copy/widgets/home.dart';
-import 'package:snap_chat_copy/widgets/un_focused.dart';
-import 'package:snap_chat_copy/widgets/under_text.dart';
+import 'package:snap_chat_copy/utill/back_button.dart';
+import 'package:snap_chat_copy/utill/button_submit.dart';
+import 'package:snap_chat_copy/utill/header.dart';
+import 'package:snap_chat_copy/utill/home.dart';
+import 'package:snap_chat_copy/utill/un_focused.dart';
+import 'package:snap_chat_copy/utill/under_text.dart';
+
+import '../utill/exepshon_map.dart';
 
 class PasswordScreen extends StatefulWidget {
   const PasswordScreen({required this.users, super.key});
@@ -24,6 +26,7 @@ class PasswordScreen extends StatefulWidget {
 class _PasswordScreenState extends State<PasswordScreen> {
   UserRepo db = UserRepo();
   User? user;
+  var expMsg = ExpMap().expMsg;
 
   final _bloc = PasswordBloc(validRepo: ValidationRepo());
   bool isPasswordValid = false;
@@ -53,7 +56,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
               Header(header: 'setAPassword'.i18n()),
               _renderUnderHeaderText(),
               _renderPasswordTF(),
-              _renderUsernameErrorMsg(),
+              _renderPasswordErrorMsg(),
               _submitButton(),
             ],
           ),
@@ -66,7 +69,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
     );
   }
 
-  Widget _renderUsernameErrorMsg() {
+  Widget _renderPasswordErrorMsg() {
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
       Padding(
           padding: const EdgeInsets.symmetric(
@@ -74,7 +77,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
             vertical: 4,
           ),
           child: Text(
-            !isPasswordValid ? 'passwordErrorMsg'.i18n() : '',
+            !isPasswordValid ? expMsg['password']! : '',
             style: const TextStyle(
                 color: Color.fromARGB(255, 185, 193, 199),
                 fontWeight: FontWeight.w700,
@@ -115,10 +118,12 @@ class _PasswordScreenState extends State<PasswordScreen> {
         isActive: isPasswordValid,
         title: 'Continue'.i18n(),
         onTap: () {
-          widget.users.password = controllerPassword.text;
-          _bloc.add(PassDbEvent(user: widget.users));
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const HomePage()));
+          if (isPasswordValid) {
+            widget.users.password = controllerPassword.text;
+            _bloc.add(PassDbEvent(user: widget.users));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const HomePage()));
+          }
         },
       ),
     ));

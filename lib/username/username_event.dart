@@ -2,7 +2,7 @@ part of 'username_bloc.dart';
 
 abstract class UsernameEvent {}
 
-class UsernaemEvent extends UsernameEvent {
+class NameEvent extends UsernameEvent {
   final String name;
-  UsernaemEvent({required this.name});
+  NameEvent({required this.name});
 }

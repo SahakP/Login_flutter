@@ -8,11 +8,12 @@ import 'package:snap_chat_copy/birthday/birthday_bloc.dart';
 import 'package:snap_chat_copy/email_phone/bloc/email_phone_screen.dart';
 import 'package:snap_chat_copy/notifier/change_notifier.dart';
 import 'package:snap_chat_copy/repositiry/validation_repository.dart';
-import 'package:snap_chat_copy/widgets/back_button.dart';
-import 'package:snap_chat_copy/widgets/button_submit.dart';
-import 'package:snap_chat_copy/widgets/header.dart';
+import 'package:snap_chat_copy/utill/back_button.dart';
+import 'package:snap_chat_copy/utill/button_submit.dart';
+import 'package:snap_chat_copy/utill/header.dart';
 
 import '../model/user_model.dart';
+import '../utill/exepshon_map.dart';
 
 class BirthdayScreen extends StatefulWidget {
   const BirthdayScreen({
@@ -29,7 +30,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
   TextEditingController controllerBirthday = TextEditingController();
 
   final _bloc = BirthdayBloc(validRepo: ValidationRepo());
-
+  var expMsg = ExpMap().expMsg;
   bool isBirthdayDataValid = true;
 
   late DateTime validDate;
@@ -63,7 +64,6 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
           Column(
             children: [
               Header(header: 'whensYoureBirthday'.i18n()),
-              //  MyLocalizations.of(context)!.whensYoureBirthday),
               _renderBirthdayTF(),
               _renderBirthdayErrorMsg(),
               _RenderContinueButton(),
@@ -106,10 +106,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
             vertical: 4,
           ),
           child: Text(
-            !isBirthdayDataValid
-                ? 'birthdayErrorMsg'.i18n()
-                //MyLocalizations.of(context)!.birthdayErrorMsg!
-                : '',
+            !isBirthdayDataValid ? expMsg['birthday']! : '',
             style: const TextStyle(
                 color: Color.fromARGB(255, 200, 53, 50),
                 fontWeight: FontWeight.w700,
@@ -147,7 +144,6 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
             child: ButtonSubmit(
                 isActive: isBirthdayDataValid,
                 title: 'Continue'.i18n(),
-                //MyLocalizations.of(context)!.Continue!,
                 onTap: () {
                   if (isBirthdayDataValid) {
                     widget.user.birthday = validDate;

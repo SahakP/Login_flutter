@@ -5,9 +5,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:snap_chat_copy/model/country_model.dart';
 
 import '../model/user_model.dart';
-import 'constant.dart';
+import '../utill/constant.dart';
 
-class ApiRepo {
+class ApiService {
   Future<List<Country>> loadCountries() async {
     var _countries = <Country>[];
     final response = await http
@@ -31,7 +31,7 @@ class ApiRepo {
 
   Future<User> addUser(User user) async {
     //make uri
-    Uri? addUserUrl = Uri.parse('${ApiConstant.baseUrl}/addUser');
+    Uri? addUserUrl = Uri.parse('${Constant.baseUrl}/addUser');
     //make header
     Map<String, String>? header = {'Content-Type': 'application/json'};
     //declare SheredPreferences
@@ -64,7 +64,7 @@ class ApiRepo {
     final tokenPref = await SharedPreferences.getInstance();
     final token = tokenPref.getString('token');
 
-    Uri? editeUserUrl = Uri.parse('${ApiConstant.baseUrl}/editAccount');
+    Uri? editeUserUrl = Uri.parse('${Constant.baseUrl}/editAccount');
 
     Map<String, String>? header = {
       'token': token!,
@@ -89,23 +89,19 @@ class ApiRepo {
   }
 
   Future<bool> checkName(String name) async {
-    Uri? nameCheckUrl = Uri.parse('${ApiConstant.baseUrl}/check/name');
+    Uri? nameCheckUrl = Uri.parse('${Constant.baseUrl}/check/name');
     final body = jsonEncode({'name': name});
     Map<String, String>? header = {'Content-Type': 'application/json'};
 
     final response = await http.post(nameCheckUrl, headers: header, body: body);
-    if (response.statusCode == 200) {}
-    // else{
-    //   if(response.statusCode == 500){
-
-    //   }
-
-    // }
-    return true;
+    if (response.statusCode == 200) {
+      return true;
+    }
+    return false;
   }
 
   Future<bool> checkEmail(String email) async {
-    Uri? emailCheckUrl = Uri.parse('${ApiConstant.baseUrl}/check/email');
+    Uri? emailCheckUrl = Uri.parse('${Constant.baseUrl}/check/email');
     final body = jsonEncode({'email': email});
     Map<String, String>? header = {'Content-Type': 'application/json'};
 
@@ -120,7 +116,7 @@ class ApiRepo {
   }
 
   Future<bool> checkPhone(String phone) async {
-    Uri? phoneCheckUrl = Uri.parse('${ApiConstant.baseUrl}/check/phone');
+    Uri? phoneCheckUrl = Uri.parse('${Constant.baseUrl}/check/phone');
     final body = jsonEncode({'phone': phone});
     Map<String, String>? header = {'Content-Type': 'application/json'};
 
@@ -135,7 +131,7 @@ class ApiRepo {
   }
 
   Future<User?> signin(String login, String password) async {
-    Uri? signinUrl = Uri.parse('${ApiConstant.baseUrl}/signin');
+    Uri? signinUrl = Uri.parse('${Constant.baseUrl}/signin');
     Map<String, String>? header = {'Content-Type': 'application/json'};
     final body = jsonEncode({'login': login, 'password': password});
     final tokenPref = await SharedPreferences.getInstance();
@@ -153,7 +149,7 @@ class ApiRepo {
     final tokenPref = await SharedPreferences.getInstance();
     final token = tokenPref.getString('token');
 
-    Uri? userUri = Uri.parse('${ApiConstant.baseUrl}/me');
+    Uri? userUri = Uri.parse('${Constant.baseUrl}/me');
 
     Map<String, String>? header = {'token': token!};
 
@@ -170,7 +166,7 @@ class ApiRepo {
   Future<void> deleteUser() async {
     final tokenPref = await SharedPreferences.getInstance();
     final token = tokenPref.getString('token');
-    Uri? deleteUri = Uri.parse('${ApiConstant.baseUrl}/delete/user');
+    Uri? deleteUri = Uri.parse('${Constant.baseUrl}/delete/user');
 
     Map<String, String>? header = {'token': token!};
     final response = await http.delete(deleteUri, headers: header);

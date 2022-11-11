@@ -1,4 +1,4 @@
-import 'package:snap_chat_copy/repositiry/api_repo.dart';
+import 'package:snap_chat_copy/services/api_service.dart';
 
 import '../model/country_model.dart';
 import '../services/country_db_service.dart';
@@ -17,7 +17,7 @@ class CountryRepo {
   }
 
   Future<Country?> getCountry() async {
-    final location = await ApiRepo().loadLocation();
+    final location = await ApiService().loadLocation();
     final userLocation = countryList.firstWhere(
         (Country country) => country.countryName.contains(location));
     return userLocation;

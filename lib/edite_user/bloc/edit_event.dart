@@ -25,7 +25,10 @@ class EditUserEvent extends EditEvent {
 
 class BirthdayEvent extends EditEvent {
   String? birthday;
-  BirthdayEvent({required this.birthday});
+
+  BirthdayEvent({
+    required this.birthday,
+  });
 }
 
 //class BackUserEditEvent extends EditEvent {}
@@ -36,3 +39,30 @@ class LastNameEvent extends EditEvent {
 }
 
 class CancelEvent extends EditEvent {}
+
+class OkButtonEvent extends EditEvent {}
+
+class FirstNameEvent extends EditEvent {
+  String? firstName;
+  FirstNameEvent({required this.firstName});
+}
+
+class NameEvent extends EditEvent {
+  String? name;
+  NameEvent({required this.name});
+}
+
+class PhoneEvent extends EditEvent {
+  String? phone;
+  PhoneEvent({required this.phone});
+}
+
+class PasswordEvent extends EditEvent {
+  String password;
+  PasswordEvent({required this.password});
+}
+
+class EmailEvent extends EditEvent {
+  String? email;
+  EmailEvent({required this.email});
+}

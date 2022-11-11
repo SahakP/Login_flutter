@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:snap_chat_copy/model/user_model.dart';
-import 'package:snap_chat_copy/repositiry/api_repo.dart';
 import 'package:snap_chat_copy/repositiry/user_repo.dart';
 import 'package:snap_chat_copy/repositiry/validation_repository.dart';
+import 'package:snap_chat_copy/services/api_service.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';
@@ -11,7 +11,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   User user = User();
   User? findUser;
   ValidationRepo validRepo = ValidationRepo();
-  ApiRepo apiRepo = ApiRepo();
+  ApiService apiRepo = ApiService();
   UserRepo userRepo = UserRepo();
 
   LoginBloc({required this.validRepo}) : super(LoginInitialState()) {

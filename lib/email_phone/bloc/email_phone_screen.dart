@@ -5,11 +5,11 @@ import 'package:provider/provider.dart';
 import 'package:snap_chat_copy/model/country_model.dart';
 import 'package:snap_chat_copy/repositiry/country_repo.dart';
 import 'package:snap_chat_copy/repositiry/validation_repository.dart';
-import 'package:snap_chat_copy/widgets/back_button.dart' show BackBtn;
-import 'package:snap_chat_copy/widgets/button_submit.dart';
-import 'package:snap_chat_copy/widgets/country_list.dart';
-import 'package:snap_chat_copy/widgets/header.dart';
-import 'package:snap_chat_copy/widgets/un_focused.dart';
+import 'package:snap_chat_copy/utill/back_button.dart' show BackBtn;
+import 'package:snap_chat_copy/utill/button_submit.dart';
+import 'package:snap_chat_copy/utill/country_list.dart';
+import 'package:snap_chat_copy/utill/header.dart';
+import 'package:snap_chat_copy/utill/un_focused.dart';
 
 import '../../model/user_model.dart';
 import '../../notifier/change_notifier.dart';
@@ -42,7 +42,8 @@ class _EmailOrPhoneState extends State<EmailOrPhone> {
 
   TextEditingController controllerEmail = TextEditingController();
   TextEditingController controllerPhoneNumber = TextEditingController();
-
+  String phoneExpMsg = 'usernaemErrorMsg'.i18n();
+  String emailExpMsg = 'emailErrorMsg'.i18n();
   bool _isEmail = true;
 
   @override
@@ -161,7 +162,7 @@ class _EmailOrPhoneState extends State<EmailOrPhone> {
       Padding(
           padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 4),
           child: Text(
-            !isEmailValid ? 'emailErrorMsg'.i18n() : '',
+            emailExpMsg,
             style: const TextStyle(
                 color: Color.fromARGB(255, 185, 193, 199),
                 fontWeight: FontWeight.w700,
@@ -190,7 +191,7 @@ class _EmailOrPhoneState extends State<EmailOrPhone> {
       Padding(
           padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 4),
           child: Text(
-            !isPhoneValid ? 'usernaemErrorMsg'.i18n() : '',
+            phoneExpMsg,
             style: const TextStyle(
                 color: Color.fromARGB(255, 185, 193, 199),
                 fontWeight: FontWeight.w700,
@@ -355,14 +356,32 @@ class _EmailOrPhoneState extends State<EmailOrPhone> {
 extension _BlocListener on _EmailOrPhoneState {
   void _listener(context, state) {
     if (state is EmailState) {
-      isEmailValid = state.isEmailValid;
+      emailExpMsg = state.emailExpMsg;
+      isEmailValid = true;
+    }
+    if (state is EmailValidationState) {
+      emailExpMsg = state.emailExpMsg;
+      isEmailValid = false;
+    }
+    if (state is EmailCheckState) {
+      emailExpMsg = state.emailExpMsg;
+      isEmailValid = false;
     }
     if (state is EmailPhoneLoadCountresState) {
       _selectedCountry = state.currentLocation;
       _countries = state.countries;
     }
     if (state is PhoneState) {
-      isPhoneValid = state.isPhoneValid;
+      phoneExpMsg = state.phoneExpMsg;
+      isPhoneValid = true;
+    }
+    if (state is PhoneValidationState) {
+      phoneExpMsg = state.phoneExpMsg;
+      isPhoneValid = false;
+    }
+    if (state is PhoneCheckState) {
+      phoneExpMsg = state.phoneExpMsg;
+      isPhoneValid = false;
     }
   }
 }

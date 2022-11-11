@@ -6,6 +6,7 @@
     "SIGNUP":"SIGNUP",
     "usernaemOrEmail": "USERNAME OR EMAIL",
     "usernaemErrorMsg": "must be greater than or equal 1 symbol",
+    "phoneErrorMsg": "must be greater than or equal 1 symbol",
     "password":"PASSWORD",
     "passwordErrorMsg": "must be greater than or equal 8 symbol",
     "forgotYourPassword": "Forgot your Password?",
@@ -28,17 +29,21 @@
     "whatsYourMobileNumber":"What's your \n mobile number?",
     "EMAIL":"EMAIL",
     "emailErrorMsg":"Enter Correct Email Address",
+    "emailBusy":"Email busy choose another",
     "smsVerification": "We'll send you an SMS verification code.",
     "MOBILENUMBER":"MOBILE NUMBER",
     "signUpWithEmail":"Sign up with email instead",
     "signUpWithPhone":"Sign up with phone instead",
     "pickAUsername":"Pick a username",
     "underHederText":"Your username is how friends add you \n on Snapchat",
-    "userNameErrorMsg": "must be greather then or equals 5 symbols",
+    "NameErrorMsg": "must be greather then or equals 5 symbols",
+    "NameBusy":"Username busy choose another",
+    "phoneBusy":"This phone is already used",
     "USERNAME":"USERNAME",
     "setAPassword":"Set a password",
     "underPassHedTxt": "Your password should be at least 8 \n characters",
-    "Welcome":"Welcome"
+    "Welcome":"Welcome",
+    "EditHeder":"Edit account"
 
     
   }

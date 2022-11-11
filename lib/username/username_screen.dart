@@ -4,23 +4,25 @@ import 'package:localization/localization.dart';
 import 'package:snap_chat_copy/password/password_screen.dart';
 import 'package:snap_chat_copy/repositiry/validation_repository.dart';
 import 'package:snap_chat_copy/username/username_bloc.dart';
-import 'package:snap_chat_copy/widgets/back_button.dart';
-import 'package:snap_chat_copy/widgets/button_submit.dart';
-import 'package:snap_chat_copy/widgets/header.dart';
-import 'package:snap_chat_copy/widgets/un_focused.dart';
-import 'package:snap_chat_copy/widgets/under_text.dart';
+import 'package:snap_chat_copy/utill/back_button.dart';
+import 'package:snap_chat_copy/utill/button_submit.dart';
+import 'package:snap_chat_copy/utill/header.dart';
+import 'package:snap_chat_copy/utill/un_focused.dart';
+import 'package:snap_chat_copy/utill/under_text.dart';
 
 import '../model/user_model.dart';
 
 class UsernameScreen extends StatefulWidget {
   const UsernameScreen({required this.users, super.key});
   final User users;
+
   @override
   State<UsernameScreen> createState() => _UsernameScreenState();
 }
 
 class _UsernameScreenState extends State<UsernameScreen> {
   final _bloc = UsernameBloc(validRepo: ValidationRepo());
+  String nameExpMsge = 'NameErrorMsg'.i18n();
   bool isUserValid = false;
   TextEditingController controllerUsername = TextEditingController();
 
@@ -71,7 +73,7 @@ class _UsernameScreenState extends State<UsernameScreen> {
             vertical: 8,
           ),
           child: Text(
-            !isUserValid ? 'userNameErrorMsg'.i18n() : '',
+            nameExpMsge,
             style: const TextStyle(
                 color: Color.fromARGB(255, 185, 193, 199),
                 fontWeight: FontWeight.w700,
@@ -90,7 +92,7 @@ class _UsernameScreenState extends State<UsernameScreen> {
         autofocus: true,
         controller: controllerUsername,
         onChanged: (value) {
-          _bloc.add(UsernaemEvent(name: value));
+          _bloc.add(NameEvent(name: value));
         },
         style: const TextStyle(
             color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
@@ -125,8 +127,17 @@ class _UsernameScreenState extends State<UsernameScreen> {
 
 extension _BlocListener on _UsernameScreenState {
   void _listener(context, state) {
-    if (state is UsernaemState) {
-      isUserValid = state.isUsernameValid;
+    if (state is NameState) {
+      nameExpMsge = state.nameExpMsg;
+      isUserValid = true;
+    }
+    if (state is NameValidationState) {
+      nameExpMsge = state.nameExpMsg;
+      isUserValid = false;
+    }
+    if (state is NameCheckState) {
+      nameExpMsge = state.nameExpMsg;
+      isUserValid = false;
     }
   }
 }
