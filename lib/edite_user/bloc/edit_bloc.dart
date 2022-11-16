@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:snap_chat_copy/model/api_model.dart';
 import 'package:snap_chat_copy/model/user_model.dart';
 import 'package:snap_chat_copy/repositiry/user_repo.dart';
 import 'package:snap_chat_copy/repositiry/validation_repository.dart';

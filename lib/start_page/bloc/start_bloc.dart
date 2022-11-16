@@ -17,7 +17,7 @@ class StartBloc extends Bloc<StartEvent, StartState> {
     final token = tokenPref.getString('token');
 
     if (token != null) {
-      User? user = await ApiService().getUser();
+      final user = await ApiService().getUser();
       emit(IsRegState(isReg: true, user: user));
     } else {
       emit(NoUserState());

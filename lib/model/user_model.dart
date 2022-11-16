@@ -46,13 +46,13 @@ class User {
 
   Map<String, dynamic> toMap() {
     return {
-      'firstName': firstName,
-      'lastName': lastName,
-      'password': password,
-      'email': email,
-      'phone': phone,
+      'firstName': firstName!,
+      'lastName': lastName!,
+      'password': password!,
+      'email': email!,
+      'phone': phone!,
       'birthDate': birthday.toString(),
-      'name': name,
+      'name': name!,
     };
   }
 

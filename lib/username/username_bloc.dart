@@ -20,7 +20,7 @@ class UsernameBloc extends Bloc<UsernameEvent, UsernameState> {
     if (!validRepo.nameValidation(event.name)) {
       emit(NameValidationState(nameExpMsg: expMsg['nameValid']!));
     }
-    if (!await apiService.checkName(event.name!)) {
+    if (!await apiService.checkName(event.name)) {
       emit(NameCheckState(nameExpMsg: expMsg['nameCheck']!));
     }
     if (validRepo.nameValidation(event.name) &&

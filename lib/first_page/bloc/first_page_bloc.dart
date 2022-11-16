@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:snap_chat_copy/services/api_service.dart';
 import 'package:snap_chat_copy/repositiry/user_repo.dart';
+import 'package:snap_chat_copy/services/api_service.dart';
 
 import '../../model/user_model.dart';
 
@@ -24,7 +24,7 @@ class FirstPageBloc extends Bloc<FirstPageEvent, FirstPageState> {
     emit(LogoutState());
   }
 
-  Future<void> _EditeEvent(GoEditeEvent event, Emitter emirt) async {
+  Future<void> _EditeEvent(GoEditeEvent event, Emitter emit) async {
     emit(GoEditeState());
   }
 
@@ -36,7 +36,7 @@ class FirstPageBloc extends Bloc<FirstPageEvent, FirstPageState> {
     if (user != null) {
       await apiRepo.deleteUser();
       final token = tokenPref.remove('token');
-      userRepo.delete(user.name!);
+      //TODO:    userRepo.delete(user.name!);
     }
     emit(DeleteState());
   }

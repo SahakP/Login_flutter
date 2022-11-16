@@ -116,7 +116,7 @@ class _FirstPageState extends State<FirstPage> {
       child: Align(
         alignment: Alignment.topLeft,
         child: Text(
-          'First name: ' + widget.user.firstName!,
+          'First name: ' + widget.user.firstName.toString(),
           style: const TextStyle(
               color: Colors.black, fontWeight: FontWeight.w800, fontSize: 18),
         ),

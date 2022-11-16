@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_mongodb_realm/flutter_mongo_realm.dart';
 import 'package:localization/localization.dart';
 import 'package:snap_chat_copy/start_page/start_screen.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await RealmApp.init('application - 0 - tbwaj');
+  RealmApp().login(Credentials.anonymous());
   runApp(
     const MyApp(),
   );
