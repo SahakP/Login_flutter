@@ -88,9 +88,9 @@ class _FirstPageState extends State<FirstPage> {
       child: Align(
         alignment: Alignment.topLeft,
         child: Text(
-          'Last naem: ' + widget.user.lastName!,
+          'lastName'.i18n() + ': ' + widget.user.lastName!,
           style: const TextStyle(
-              color: Colors.black, fontWeight: FontWeight.w800, fontSize: 18),
+              color: Colors.black, fontWeight: FontWeight.w800, fontSize: 16),
         ),
       ),
     );
@@ -102,9 +102,9 @@ class _FirstPageState extends State<FirstPage> {
       child: Align(
         alignment: Alignment.topLeft,
         child: Text(
-          'Birth date: ' + _validFormatDate,
+          'BIRTHDAY'.i18n() + ': ' + _validFormatDate,
           style: const TextStyle(
-              color: Colors.black, fontWeight: FontWeight.w800, fontSize: 18),
+              color: Colors.black, fontWeight: FontWeight.w800, fontSize: 16),
         ),
       ),
     );
@@ -112,13 +112,13 @@ class _FirstPageState extends State<FirstPage> {
 
   Widget _renderFirstName() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       child: Align(
         alignment: Alignment.topLeft,
         child: Text(
-          'First name: ' + widget.user.firstName.toString(),
+          'firstName'.i18n() + ': ' + widget.user.firstName!,
           style: const TextStyle(
-              color: Colors.black, fontWeight: FontWeight.w800, fontSize: 18),
+              color: Colors.black, fontWeight: FontWeight.w800, fontSize: 16),
         ),
       ),
     );
@@ -126,13 +126,13 @@ class _FirstPageState extends State<FirstPage> {
 
   Widget _renderEmail() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       child: Align(
         alignment: Alignment.topLeft,
         child: Text(
-          'Email: ' + widget.user.email!,
+          'EMAIL'.i18n() + ': ' + widget.user.email!,
           style: const TextStyle(
-              color: Colors.black, fontWeight: FontWeight.w800, fontSize: 18),
+              color: Colors.black, fontWeight: FontWeight.w800, fontSize: 16),
         ),
       ),
     );
@@ -140,13 +140,13 @@ class _FirstPageState extends State<FirstPage> {
 
   Widget _renderPhone() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       child: Align(
         alignment: Alignment.topLeft,
         child: Text(
-          'Phone number: ' + widget.user.phone!,
+          'MOBILENUMBER'.i18n() + ': ' + widget.user.phone!,
           style: const TextStyle(
-              color: Colors.black, fontWeight: FontWeight.w800, fontSize: 18),
+              color: Colors.black, fontWeight: FontWeight.w800, fontSize: 16),
         ),
       ),
     );
@@ -154,13 +154,13 @@ class _FirstPageState extends State<FirstPage> {
 
   Widget _renderUsername() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       child: Align(
         alignment: Alignment.topLeft,
         child: Text(
-          'Usernaem: ' + widget.user.name!,
+          'USERNAME'.i18n() + ': ' + widget.user.name!,
           style: const TextStyle(
-              color: Colors.black, fontWeight: FontWeight.w800, fontSize: 18),
+              color: Colors.black, fontWeight: FontWeight.w800, fontSize: 16),
         ),
       ),
     );
@@ -168,13 +168,13 @@ class _FirstPageState extends State<FirstPage> {
 
   Widget _renderPassword() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       child: Align(
         alignment: Alignment.topLeft,
         child: Text(
-          'Password: ' + widget.user.password!,
+          'password'.i18n() + ': ' + widget.user.password!,
           style: const TextStyle(
-              color: Colors.black, fontWeight: FontWeight.w800, fontSize: 18),
+              color: Colors.black, fontWeight: FontWeight.w800, fontSize: 16),
         ),
       ),
     );
@@ -245,7 +245,6 @@ extension _BlocListener on _FirstPageState {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => const HomePage()));
       // Fluttertoast.showToast(msg: 'User deleted', gravity: ToastGravity.CENTER);
-
     }
   }
 }

@@ -2,11 +2,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:localization/localization.dart';
+//import 'package:path/path.dart';
 import 'package:snap_chat_copy/first_page/first_page_screen.dart';
 import 'package:snap_chat_copy/repositiry/user_repo.dart';
 import 'package:snap_chat_copy/repositiry/validation_repository.dart';
-import 'package:snap_chat_copy/utill/exepshon_map.dart';
+import 'package:snap_chat_copy/widgets/home.dart';
 
 import '../model/user_model.dart';
 import '../services/api_service.dart';
@@ -164,7 +166,9 @@ class _EditePageState extends State<EditePage> {
             decoration: InputDecoration(
               labelText: 'Birth date: ',
               hintText:
-                  DateFormat('dd MMMM yyyy').format(widget.user.birthday!),
+                  '${DateFormat('dd MMMM yyyy').format(widget.user.birthday!)}',
+
+              // hintText: '${widget.user.birthday.toString()}'
             ),
           )
         ],
