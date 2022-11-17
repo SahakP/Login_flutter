@@ -84,7 +84,7 @@ class _FirstPageState extends State<FirstPage> {
 
   Widget _renderLastName() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       child: Align(
         alignment: Alignment.topLeft,
         child: Text(
@@ -98,7 +98,7 @@ class _FirstPageState extends State<FirstPage> {
 
   Widget _renderBDate() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       child: Align(
         alignment: Alignment.topLeft,
         child: Text(

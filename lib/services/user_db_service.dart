@@ -29,14 +29,6 @@ class UsersDataBase {
   //   } catch (e) {}
   // }
 
-  //   Future<void> init() async {
-  //   // initialized MongoRealm App
-
-  //   try {} on PlatformException catch (e) {
-  //     print("Error! ${e.message}");
-  //   } on Exception {}
-  // }
-
   // Future<void> insertA(User user) async {
   //   await userdb!.insert(
   //     'users',
@@ -46,7 +38,7 @@ class UsersDataBase {
   // }
 
   Future<void> insertData(User user) async {
-    var collection = client.getDatabase('users').getCollection('collection');
+    var collection = client.getDatabase('myDb').getCollection('users');
 
     var document = MongoDocument({
       'firstName': user.firstName,
@@ -58,21 +50,27 @@ class UsersDataBase {
       'name': user.name,
     });
 
-    collection.insertOne(document);
-    //   collection.insertMany([
-
-    //     MongoDocument({
-    //       "time": DateTime.now().millisecondsSinceEpoch,
-    //       "username": "moshe",
-    //       "grades": [90, 98],
-    //     }),
-    //     MongoDocument({
-    //       "time": DateTime.now().millisecondsSinceEpoch,
-    //       "username": "adiel",
-    //       "age": [77, 55, 91],
-    //     }),
-    //   ]);
+    await collection.insertMany([document]);
   }
+
+  Future<User> getUser(String userName, String password) async {
+    var collection = client.getDatabase('myDb').getCollection('users');
+
+    var docs = await collection.find(
+      filter: {
+        'name': userName,
+        'password': password,
+      },
+    );
+    final user = User.fromMap(docs.first.map);
+    return user;
+  }
+
+  Future<void> deleteUser(User user) async {
+    var collection = client.getDatabase('myDb').getCollection('users');
+    var deletedDocs = await collection.deleteOne({'name': user.name});
+  }
+//      print(deletedDocs);
 
 //   Future<void> onCreate(Database db, int vexrsion) async {
 //     await db.execute('CREATE TABLE users'
@@ -81,4 +79,14 @@ class UsersDataBase {
 //         'password STRING,birthDate STRING)');
 //   }
 // }
+
+  Future<void> updateUser(User user) async {
+    var collection = client.getDatabase('myDb').getCollection('users');
+
+    var results = await collection.find(
+      filter: {
+        'name': user.name,
+      },
+    );
+  }
 }

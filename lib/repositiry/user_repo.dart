@@ -9,124 +9,28 @@ class UserRepo {
     await userDB.insertData(user);
   }
 
-//    Future<void> insertData() async {
-//     var collection = client.getDatabase("test").getCollection("my_collection");
+  Future<User?> getUser(String userName, String password) async {
+    final user = await userDB.getUser(userName, password);
+    return user;
+  }
 
-//     try {
-// //      var document = MongoDocument({
-// //        "time": DateTime.now().millisecondsSinceEpoch,
-// //        "name": "hadar",
-// //        "age": 27,
-// //        "dogs": [
-// //          "shocko",
-// //          "nuna"
-// //        ]
-// //      });
-// //
-// //      collection.insertOne(document);
-
-//       collection.insertMany([
-//         MongoDocument({
-//           "time": DateTime.now().millisecondsSinceEpoch,
-//           "username": "moshe",
-//           "grades": [90, 98],
-//         }),
-//         MongoDocument({
-//           "time": DateTime.now().millisecondsSinceEpoch,
-//           "username": "adiel",
-//           "age": [77, 55, 91],
-//         }),
-//       ]);
-//     } on PlatformException {
-//       debugPrint("Error!!!");
-//     }
-//   }
-
-  //   Future<User?> getUser(String userName, String password) async {
-  //     //await userDB.init();
-  //     final user = await userDB.userdb!.query('users',
-  //         where: 'name = ? AND password = ?', whereArgs: [userName, password]);
-  //     if (user.isEmpty) {
-  //       return null;
-  //     } else {
-  //       return User.fromMap(user.first);
-  //     }
+  // Future<User?> getUser(String userName, String password) async {
+  //   //await userDB.init();
+  //   final user = await userDB.userdb!.query('users',
+  //       where: 'name = ? AND password = ?', whereArgs: [userName, password]);
+  //   if (user.isEmpty) {
+  //     return null;
+  //   } else {
+  //     return User.fromMap(user.first);
   //   }
-// //    Future<void> fetchData() async {
-//     // sample_mflix.comments
-//     // test.my_collection
-//     var collection = client.getDatabase("test").getCollection("my_collection");
+  // }
+  Future<void> delete(User user) async {
+    await userDB.deleteUser(user);
 
-//     try {
-// //      var document = MongoDocument.fromMap({
-// //        "time": DateTime.now().millisecondsSinceEpoch,
-// //        "user_id": "abcdefg",
-// //        "price": 31.78432
-// //      });
-
-// //      var size = await collection.count({
-// //        // "name": "kfir"
-// //        "name": "Taylor Scott",
-// //      });
-// //      print(size);
-
-// //      var docs = await collection.find(
-// //          filter: {
-// //            "year": QueryOperator.gt(2010)..lte(2014),
-// //            // "year":{"$gt":2010,"$lte":2014}
-// //      });
-// //      print(docs.length);
-
-// //      var doc = await collection.findOne({
-// //        //"name": "kfir",
-// //        "name": "Taylor Scott",
-// //      });
-// //      int ssaa = 232;
-
-//       /// with projection/limit
-//       var docs = await collection.find(
-//         filter: {
-//           "name": "naama",
-//         },
-// //        options: RemoteFindOptions(
-// //            projection: {
-// //              "title": ProjectionValue.INCLUDE,
-// //              "rated": ProjectionValue.INCLUDE,
-// //              "year": ProjectionValue.INCLUDE,
-// //            },
-// //            limit: 70,
-// //            sort: {
-// //              "year": OrderValue.DESCENDING,
-// //            }),
-//       );
-// //      print(doc.get("_id"));
-// //      print(docs.length);
-
-//       docs.forEach((doc) {
-//         print(doc.get("_id"));
-//       });
-
-// //      /// with projection
-// //      var doc = await collection.findOne(
-// ////        filter: {
-// ////          "year": 2014,
-// ////        },
-// ////        projection: {
-// ////          "title": ProjectionValue.INCLUDE,
-// ////          "rated": ProjectionValue.INCLUDE,
-// ////          "year": ProjectionValue.INCLUDE,
-// ////        },
-// //      );
-// //      print(doc.map);
-//     } on PlatformException catch (e) {
-//       debugPrint("Error: $e");
-//     }
-//   }
-
-  //   Future<void> delete(String name) async {
-  //     await userDB.userdb!.delete('users', where: 'name=?', whereArgs: [name]);
-  //   }
-}
+    //  Future<void> delete(String name) async {
+    //     await userDB.userdb!.delete('users', where: 'name=?', whereArgs: [name]);
+    //   }
+  }
 // //  Future<void> deleteData() async {
 //     // sample_mflix.comments
 //     // test.my_collection
@@ -155,3 +59,4 @@ class UserRepo {
 //       debugPrint("Error! ${e.message}");
 //     }
 //   }
+}

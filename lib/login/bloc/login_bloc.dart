@@ -11,7 +11,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   User user = User();
   User? findUser;
   ValidationRepo validRepo = ValidationRepo();
-  ApiService apiRepo = ApiService();
+  ApiService apiService = ApiService();
   UserRepo userRepo = UserRepo();
 
   LoginBloc({required this.validRepo}) : super(LoginInitialState()) {
@@ -32,7 +32,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   Future<void> _onLogInButtonEvent(LogInButtonEvent event, Emitter emit) async {
-    final user = await apiRepo.signin(event.userName, event.password);
+    final user = await apiService.signin(event.userName, event.password);
+    //await userRepo.getUser(event.userName, event.password);
 
     emit(ButtonState(user: user));
   }

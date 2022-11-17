@@ -51,6 +51,7 @@ class ApiService {
     if (response.statusCode == 200) {
       //get tocken from body
       String token = jsonDecode(response.body)['createdTokenForUser'];
+
       //save token in SharedPreferences
       tokenPref.setString('token', token);
 
@@ -139,7 +140,9 @@ class ApiService {
     final response = await http.post(signinUrl, headers: header, body: body);
     if (response.statusCode == 200) {
       String token = jsonDecode(response.body)['createdTokenForUser'];
+
       tokenPref.setString('token', token);
+
       user = User.fromJson((jsonDecode(response.body))['user']);
     }
     return user;

@@ -30,13 +30,12 @@ class FirstPageBloc extends Bloc<FirstPageEvent, FirstPageState> {
 
   Future<void> _DeleteEvent(DeleteEvent event, Emitter emit) async {
     final tokenPref = await SharedPreferences.getInstance();
-
     User? user;
     user = await apiRepo.getUser();
     if (user != null) {
       await apiRepo.deleteUser();
+      await userRepo.delete(user);
       final token = tokenPref.remove('token');
-      //TODO:    userRepo.delete(user.name!);
     }
     emit(DeleteState());
   }
