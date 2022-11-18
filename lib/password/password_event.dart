@@ -7,7 +7,7 @@ class PassEvent extends PasswordEvent {
   PassEvent({required this.password});
 }
 
-class PassDbEvent extends PasswordEvent {
+class ButtonEvent extends PasswordEvent {
   User user;
-  PassDbEvent({required this.user});
+  ButtonEvent({required this.user});
 }

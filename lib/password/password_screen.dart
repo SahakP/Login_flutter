@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:localization/localization.dart';
+import 'package:snap_chat_copy/first_page/first_page_screen.dart';
 import 'package:snap_chat_copy/model/user_model.dart';
 import 'package:snap_chat_copy/password/password_bloc.dart';
 import 'package:snap_chat_copy/repositiry/user_repo.dart';
@@ -15,9 +16,9 @@ import 'package:snap_chat_copy/utill/under_text.dart';
 import '../utill/exepshon_map.dart';
 
 class PasswordScreen extends StatefulWidget {
-  const PasswordScreen({required this.users, super.key});
+  const PasswordScreen({required this.user, super.key});
 
-  final User users;
+  final User user;
 
   @override
   State<PasswordScreen> createState() => _PasswordScreenState();
@@ -119,8 +120,8 @@ class _PasswordScreenState extends State<PasswordScreen> {
         title: 'Continue'.i18n(),
         onTap: () {
           if (isPasswordValid) {
-            widget.users.password = controllerPassword.text;
-            _bloc.add(PassDbEvent(user: widget.users));
+            widget.user.password = controllerPassword.text;
+            _bloc.add(ButtonEvent(user: widget.user));
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const HomePage()));
           }
@@ -139,7 +140,11 @@ extension _BlocListener on _PasswordScreenState {
       user = state.user;
       if (user != null) {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const HomePage()));
+            context,
+            MaterialPageRoute(
+                builder: (context) => FirstPage(
+                      user: widget.user,
+                    )));
       }
     }
   }

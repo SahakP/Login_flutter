@@ -169,7 +169,19 @@ class EditBloc extends Bloc<EditEvent, EditState> {
               {user.birthday = DateTime.parse(birthday)}
           }
         : null;
-    final response = await apiService.editUer(user);
+    // final response =
+    await apiService.editUer(user);
+    await userRepo.update(
+        user,
+        ({
+          'naem': event.name,
+          'firstName': user.firstName,
+          'lastName': user.lastName,
+          'password': user.password,
+          'email': user.email,
+          'phone': user.phone,
+          'birthDate': user.birthday.toString(),
+        }));
     emit(EditUserState(user: user));
   }
 }

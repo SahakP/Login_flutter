@@ -9,10 +9,13 @@ part 'password_event.dart';
 part 'password_state.dart';
 
 class PasswordBloc extends Bloc<PasswordEvent, PasswordState> {
+  ApiService apiService = ApiService();
+  UserRepo userRepo = UserRepo();
+
   ValidationRepo validRepo = ValidationRepo();
   PasswordBloc({required this.validRepo}) : super(PasswordInitial()) {
     on<PassEvent>(_onPassEvent);
-    on<PassDbEvent>(_onPassDbEvent);
+    on<ButtonEvent>(_onButtonEvent);
   }
 
   Future<void> _onPassEvent(PassEvent event, Emitter emit) async {
@@ -20,9 +23,10 @@ class PasswordBloc extends Bloc<PasswordEvent, PasswordState> {
         IsPasswordValid: validRepo.passwordValidation(event.password)));
   }
 
-  Future<void> _onPassDbEvent(PassDbEvent event, Emitter emitter) async {
-    UserRepo().createUser(event.user);
-    ApiService().addUser(event.user);
+  Future<void> _onButtonEvent(ButtonEvent event, Emitter emitter) async {
+    await apiService.addUser(event.user);
+    await userRepo.createUser(event.user);
+    await apiService.signin(event.user.name!, event.user.password!);
     emitter(PassDbState(user: event.user));
   }
 }

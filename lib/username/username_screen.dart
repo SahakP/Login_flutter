@@ -116,8 +116,7 @@ class _UsernameScreenState extends State<UsernameScreen> {
               ? Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          PasswordScreen(users: widget.users)))
+                      builder: (context) => PasswordScreen(user: widget.users)))
               : null;
         },
       ),

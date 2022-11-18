@@ -29,6 +29,7 @@ class ApiService {
     return currentCountry;
   }
 
+  //String? realmToken;
   Future<User> addUser(User user) async {
     //make uri
     Uri? addUserUrl = Uri.parse('${Constant.baseUrl}/addUser');
@@ -51,9 +52,11 @@ class ApiService {
     if (response.statusCode == 200) {
       //get tocken from body
       String token = jsonDecode(response.body)['createdTokenForUser'];
-
-      //save token in SharedPreferences
       tokenPref.setString('token', token);
+      // final tokenS= [ token, realmToken];
+      ////tokenPref.setStringList('tokenS', tokenS);
+      String realmToken = jsonDecode(response.body)['realmToken'];
+      tokenPref.setString('realmToken', realmToken);
 
       //get user from body
       user = User.fromJson((jsonDecode(response.body))['user']);
@@ -92,6 +95,7 @@ class ApiService {
   Future<bool> checkName(String name) async {
     Uri? nameCheckUrl = Uri.parse('${Constant.baseUrl}/check/name');
     final body = jsonEncode({'name': name});
+
     Map<String, String>? header = {'Content-Type': 'application/json'};
 
     final response = await http.post(nameCheckUrl, headers: header, body: body);
@@ -140,8 +144,10 @@ class ApiService {
     final response = await http.post(signinUrl, headers: header, body: body);
     if (response.statusCode == 200) {
       String token = jsonDecode(response.body)['createdTokenForUser'];
-
       tokenPref.setString('token', token);
+
+      String realmToken = jsonDecode(response.body)['realmToken'];
+      tokenPref.setString('realmToken', realmToken);
 
       user = User.fromJson((jsonDecode(response.body))['user']);
     }

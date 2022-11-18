@@ -1,25 +1,20 @@
 import 'dart:async';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_mongodb_realm/flutter_mongo_realm.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/user_model.dart';
 
-class UsersDataBase {
-  static final UsersDataBase UDataB = UsersDataBase._dataBase();
-
-  UsersDataBase._dataBase();
-
-  factory UsersDataBase() {
-    return UDataB;
-  }
+class UserService {
+  //static final UsersDataBase UDataB = UsersDataBase._dataBase();
+  // UsersDataBase._dataBase();
+  //factory UsersDataBase() {
+  // return UDataB;
+  //}
 
   final MongoRealmClient client = MongoRealmClient();
   final RealmApp app = RealmApp();
 
   // Database? userdb;
-
   // Future<void> init() async {
   //   try {
   //     if (userdb != null) {}
@@ -38,6 +33,9 @@ class UsersDataBase {
   // }
 
   Future<void> insertData(User user) async {
+    final tokenPref = await SharedPreferences.getInstance();
+    final realmToken = tokenPref.getString('realmToken')!;
+    await RealmApp().login(Credentials.jwt(realmToken));
     var collection = client.getDatabase('myDb').getCollection('users');
 
     var document = MongoDocument({
@@ -55,13 +53,8 @@ class UsersDataBase {
 
   Future<User> getUser(String userName, String password) async {
     var collection = client.getDatabase('myDb').getCollection('users');
-
-    var docs = await collection.find(
-      filter: {
-        'name': userName,
-        'password': password,
-      },
-    );
+    var docs =
+        await collection.find(filter: {'name': userName, 'password': password});
     final user = User.fromMap(docs.first.map);
     return user;
   }
@@ -70,7 +63,6 @@ class UsersDataBase {
     var collection = client.getDatabase('myDb').getCollection('users');
     var deletedDocs = await collection.deleteOne({'name': user.name});
   }
-//      print(deletedDocs);
 
 //   Future<void> onCreate(Database db, int vexrsion) async {
 //     await db.execute('CREATE TABLE users'
@@ -80,13 +72,20 @@ class UsersDataBase {
 //   }
 // }
 
-  Future<void> updateUser(User user) async {
+  Future<void> updateUser(User user, _doc) async {
     var collection = client.getDatabase('myDb').getCollection('users');
 
-    var results = await collection.find(
-      filter: {
-        'name': user.name,
-      },
-    );
+    // var doc = MongoDocument({
+    //   'name': user.name,
+    //   'firstName': user.firstName,
+    //   'lastName': user.lastName,
+    //   'password': user.password,
+    //   'email': user.email,
+    //   'phone': user.phone,
+    //   'birthDate': user.birthday.toString(),
+    // });
+
+    await collection.updateMany(
+        filter: {'name': user.name}, update: UpdateOperator.set(_doc));
   }
 }

@@ -11,7 +11,8 @@ void main() async {
   // tokenPref.getString('realmToken');
 
   await RealmApp.init('application-0-tbwaj');
-  await RealmApp().login(Credentials.anonymous());
+
+  //await RealmApp().login(Credentials.anonymous());
 
   runApp(
     const MyApp(),

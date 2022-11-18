@@ -2,7 +2,7 @@ import '../model/user_model.dart';
 import '../services/user_db_service.dart';
 
 class UserRepo {
-  final userDB = UsersDataBase();
+  final userDB = UserService();
 
   Future<void> createUser(User user) async {
     // await userDB.init();
@@ -30,6 +30,12 @@ class UserRepo {
     //  Future<void> delete(String name) async {
     //     await userDB.userdb!.delete('users', where: 'name=?', whereArgs: [name]);
     //   }
+  }
+
+  //var _doc = <String, dynamic>{};
+
+  Future<void> update(User user, _doc) async {
+    await userDB.updateUser(user, _doc);
   }
 // //  Future<void> deleteData() async {
 //     // sample_mflix.comments
