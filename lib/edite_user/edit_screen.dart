@@ -126,7 +126,7 @@ class _EditePageState extends State<EditePage> {
             style: const TextStyle(
                 color: Colors.black, fontWeight: FontWeight.w800, fontSize: 16),
             decoration: InputDecoration(
-                labelText: 'Last name: ', hintText: '${widget.user.lastName}'),
+                labelText: 'Last name: ${widget.user.lastName} '),
           )
         ],
       ),
@@ -164,9 +164,8 @@ class _EditePageState extends State<EditePage> {
             style: const TextStyle(
                 color: Colors.black, fontWeight: FontWeight.w800, fontSize: 18),
             decoration: InputDecoration(
-              labelText: 'Birth date: ',
-              hintText:
-                  '${DateFormat('dd MMMM yyyy').format(widget.user.birthday!)}',
+              labelText:
+                  'Birth date: ${DateFormat('dd MMMM yyyy').format(widget.user.birthday!)}',
 
               // hintText: '${widget.user.birthday.toString()}'
             ),
@@ -246,8 +245,7 @@ class _EditePageState extends State<EditePage> {
             style: const TextStyle(
                 color: Colors.black, fontWeight: FontWeight.w800, fontSize: 16),
             decoration: InputDecoration(
-              labelText: 'First name',
-              hintText: '${widget.user.firstName}',
+              labelText: 'First name: ${widget.user.firstName}',
             ),
           )
         ],
@@ -283,8 +281,8 @@ class _EditePageState extends State<EditePage> {
             },
             style: const TextStyle(
                 color: Colors.black, fontWeight: FontWeight.w800, fontSize: 16),
-            decoration: InputDecoration(
-                labelText: 'Email', hintText: '${widget.user.email}'),
+            decoration:
+                InputDecoration(labelText: 'Email: ${widget.user.email} '),
           )
         ],
       ),
@@ -320,7 +318,7 @@ class _EditePageState extends State<EditePage> {
             style: const TextStyle(
                 color: Colors.black, fontWeight: FontWeight.w800, fontSize: 16),
             decoration: InputDecoration(
-                labelText: 'Phone number', hintText: '${widget.user.phone}'),
+                labelText: 'Phone number: ${widget.user.phone}'),
           ),
         ],
       ),
@@ -355,8 +353,7 @@ class _EditePageState extends State<EditePage> {
             },
             style: const TextStyle(
                 color: Colors.black, fontWeight: FontWeight.w800, fontSize: 16),
-            decoration: InputDecoration(
-                labelText: 'Name', hintText: '${widget.user.name}'),
+            decoration: InputDecoration(labelText: 'Name: ${widget.user.name}'),
           ),
         ],
       ),
@@ -391,8 +388,8 @@ class _EditePageState extends State<EditePage> {
             },
             style: const TextStyle(
                 color: Colors.black, fontWeight: FontWeight.w800, fontSize: 18),
-            decoration: InputDecoration(
-                labelText: 'Password', hintText: '${widget.user.password}'),
+            decoration:
+                InputDecoration(labelText: 'Password: ${widget.user.password}'),
           ),
         ],
       ),
