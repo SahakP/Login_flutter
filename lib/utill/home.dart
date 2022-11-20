@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:localization/localization.dart';
-import 'package:snap_chat_copy/signup/bloc/signup_screen.dart';
 
-import '../login/bloc/login_screen.dart';
+import '../screen/login/login_screen.dart';
+import '../screen/signup/signup_screen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

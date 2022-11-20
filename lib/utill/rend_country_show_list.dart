@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:snap_chat_copy/notifier/change_notifier.dart';
 
 import '../model/country_model.dart';
@@ -22,6 +23,7 @@ class RenderCountryShowList extends StatefulWidget {
 class _RenderCountryShowListState extends State<RenderCountryShowList> {
   MyChangeNotifier get changeNotif =>
       Provider.of<MyChangeNotifier>(context, listen: false);
+  Country? selectedCountry;
 
   @override
   Widget build(BuildContext context) {
@@ -32,16 +34,16 @@ class _RenderCountryShowListState extends State<RenderCountryShowList> {
           itemCount: widget.countriesList.length,
           shrinkWrap: true,
           itemBuilder: (context, index) {
-            final selectedCountry = widget.countriesList[index];
+            selectedCountry = widget.countriesList[index];
 
-            return (selectedCountry.name!
+            return (selectedCountry!.name!
                         .toLowerCase()
                         .contains(widget.searchText.toString().toLowerCase()) ||
-                    selectedCountry.countryPhoneCode
+                    selectedCountry!.countryPhoneCode
                         .contains(widget.searchText))
                 ? InkWell(
                     onTap: () {
-                      changeNotif.selectCountry(selectedCountry);
+                      changeNotif.selectCountry(selectedCountry!);
                       //changeNotif.selectCountry();
                       //selectCountry(selectedCountry: selectedCountry);
                       Navigator.pop(context);
@@ -55,17 +57,17 @@ class _RenderCountryShowListState extends State<RenderCountryShowList> {
                         children: [
                           Row(children: [
                             Text(
-                              flagMaker(selectedCountry),
+                              flagMaker(selectedCountry!),
                               style: const TextStyle(fontSize: 16),
                             ),
                             Expanded(
                               child: Text(
-                                selectedCountry.name!,
+                                selectedCountry!.name!,
                                 style: const TextStyle(fontSize: 16),
                               ),
                             ),
                             Text(
-                              selectedCountry.countryPhoneCode,
+                              selectedCountry!.countryPhoneCode,
                               style: const TextStyle(fontSize: 16),
                             ),
                           ]),
@@ -82,6 +84,15 @@ class _RenderCountryShowListState extends State<RenderCountryShowList> {
         ),
       ),
     );
+  }
+
+  Future<void> selectCountry() async {
+    final countryPref = await SharedPreferences.getInstance();
+    countryPref.setString('_selectCountryName', selectedCountry!.name!);
+    countryPref.setString(
+        '_selectCountryCountryName', selectedCountry!.countryName!);
+    countryPref.setString(
+        '_selectCountryCountryPhoneCode', selectedCountry!.countryPhoneCode!);
   }
 
   String flagMaker(Country country) {

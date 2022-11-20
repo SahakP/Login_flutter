@@ -23,4 +23,15 @@ class Country {
       'iso2_cc': countryName,
     };
   }
+
+  Country.fromMap(Map<String, dynamic> country)
+      : name = country['name'] as String,
+        countryPhoneCode = country['e164_cc'].toString(),
+        countryName = country['iso2_cc'] as String;
+
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'e164_cc': countryPhoneCode,
+        'iso2_cc': countryName,
+      };
 }
