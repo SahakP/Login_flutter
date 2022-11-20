@@ -1,15 +1,15 @@
 import 'package:bloc/bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:snap_chat_copy/repositiry/user_repo.dart';
 import 'package:snap_chat_copy/services/Api/api_service.dart';
 
 import '../../../model/user_model.dart';
+import '../../../repositiry/mongoDb/user_mongo_repo.dart';
 
 part 'first_page_event.dart';
 part 'first_page_state.dart';
 
 class FirstPageBloc extends Bloc<FirstPageEvent, FirstPageState> {
-  UserRepo userRepo = UserRepo();
+  UserMongoRepo userRepo = UserMongoRepo();
   ApiService apiRepo = ApiService();
 
   FirstPageBloc() : super(FirstPageInitial()) {
@@ -34,7 +34,7 @@ class FirstPageBloc extends Bloc<FirstPageEvent, FirstPageState> {
     user = await apiRepo.getUser();
     if (user != null) {
       await apiRepo.deleteUser();
-      await userRepo.delete(user);
+      await userRepo.deleteUser(user);
       final token = tokenPref.remove('token');
     }
     emit(DeleteState());

@@ -1,7 +1,7 @@
 import '../../model/user_model.dart';
 import '../../services/mongoServices/user_mongo_service.dart';
 
-class UserRepo {
+class UserMongoRepo {
   final userDB = UserMongoService();
 
   Future<void> createUser(User user) async {

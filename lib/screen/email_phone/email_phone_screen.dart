@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:localization/localization.dart';
 import 'package:provider/provider.dart';
 import 'package:snap_chat_copy/model/country_model.dart';
-import 'package:snap_chat_copy/repositiry/country_repo.dart';
 import 'package:snap_chat_copy/repositiry/validation/validation_repository.dart';
 import 'package:snap_chat_copy/utill/back_button.dart' show BackBtn;
 import 'package:snap_chat_copy/utill/button_submit.dart';
@@ -13,6 +12,7 @@ import 'package:snap_chat_copy/utill/un_focused.dart';
 
 import '../../model/user_model.dart';
 import '../../notifier/change_notifier.dart';
+import '../../repositiry/sql/country_sql_repo.dart';
 import '../username/username_screen.dart';
 import 'bloc/email_phone_bloc.dart';
 
@@ -25,8 +25,8 @@ class EmailOrPhone extends StatefulWidget {
 }
 
 class _EmailOrPhoneState extends State<EmailOrPhone> {
-  final _bloc =
-      EmailPhoneBloc(validRepo: ValidationRepo(), countryRepo: CountryRepo());
+  final _bloc = EmailPhoneBloc(
+      validRepo: ValidationRepo(), countrySqlRepo: CountrySqlRepo());
 
   bool isEmailValid = false;
   bool isPhoneValid = false;

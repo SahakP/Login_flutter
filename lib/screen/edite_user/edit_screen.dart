@@ -6,10 +6,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:localization/localization.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 //import 'package:path/path.dart';
-import 'package:snap_chat_copy/repositiry/user_repo.dart';
 import 'package:snap_chat_copy/repositiry/validation/validation_repository.dart';
 
 import '../../model/user_model.dart';
+import '../../repositiry/mongoDb/user_mongo_repo.dart';
 import '../../services/Api/api_service.dart';
 import '../../utill/exepshon_map.dart';
 import '../../utill/header.dart';
@@ -28,7 +28,7 @@ class EditePage extends StatefulWidget {
 
 class _EditePageState extends State<EditePage> {
   final apiRepo = ApiService();
-  final userRepo = UserRepo();
+  final userRepo = UserMongoRepo();
   final validationRepo = ValidationRepo();
 
   TextEditingController passwordController = TextEditingController();
@@ -60,7 +60,7 @@ class _EditePageState extends State<EditePage> {
   void initState() {
     _bloc = EditBloc(
         apiService: apiRepo,
-        userRepo: userRepo,
+        userMongoRepo: userRepo,
         validationRepo: validationRepo);
     super.initState();
   }

@@ -3,7 +3,7 @@ import 'package:snap_chat_copy/services/sqlServices/country_sql_service.dart';
 
 import '../../model/country_model.dart';
 
-class CountryRepo {
+class CountrySqlRepo {
   final countryList = <Country>[];
 
   Future<List<Country>> getCountries() async {

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:localization/localization.dart';
 import 'package:snap_chat_copy/model/user_model.dart';
-import 'package:snap_chat_copy/repositiry/user_repo.dart';
 import 'package:snap_chat_copy/repositiry/validation/validation_repository.dart';
 import 'package:snap_chat_copy/utill/back_button.dart';
 import 'package:snap_chat_copy/utill/button_submit.dart';
@@ -25,7 +24,7 @@ class PasswordScreen extends StatefulWidget {
 }
 
 class _PasswordScreenState extends State<PasswordScreen> {
-  UserRepo db = UserRepo();
+  //UserRepo db = UserRepo();
   User? user;
   var expMsg = ExpMap().expMsg;
 

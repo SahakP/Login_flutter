@@ -1,9 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:snap_chat_copy/model/country_model.dart';
-import 'package:snap_chat_copy/repositiry/country_repo.dart';
 import 'package:snap_chat_copy/repositiry/validation/validation_repository.dart';
 import 'package:snap_chat_copy/services/Api/api_service.dart';
 
+import '../../../repositiry/sql/country_sql_repo.dart';
 import '../../../utill/exepshon_map.dart';
 
 part 'email_phone_event.dart';
@@ -13,10 +13,10 @@ var expMsg = ExpMap().expMsg;
 
 class EmailPhoneBloc extends Bloc<EmailPhoneEvent, EmailPhoneState> {
   ValidationRepo validRepo = ValidationRepo();
-  CountryRepo countryRepo = CountryRepo();
+  CountrySqlRepo countrySqlRepo = CountrySqlRepo();
   ApiService apiService = ApiService();
 
-  EmailPhoneBloc({required this.countryRepo, required this.validRepo})
+  EmailPhoneBloc({required this.countrySqlRepo, required this.validRepo})
       : super(EmailPhoneInitial()) {
     on<EmailEvent>(_onEmailEvent);
     on<EmailPhoneLoadCountresEvent>(_loadCountries);
@@ -52,7 +52,7 @@ class EmailPhoneBloc extends Bloc<EmailPhoneEvent, EmailPhoneState> {
   Future<void> _loadCountries(
       EmailPhoneLoadCountresEvent event, Emitter emitter) async {
     emitter(EmailPhoneLoadCountresState(
-        countries: await countryRepo.getCountries(),
-        currentLocation: await countryRepo.getCountry()));
+        countries: await countrySqlRepo.getCountries(),
+        currentLocation: await countrySqlRepo.getCountry()));
   }
 }

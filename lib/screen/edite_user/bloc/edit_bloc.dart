@@ -1,10 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:snap_chat_copy/model/user_model.dart';
-import 'package:snap_chat_copy/repositiry/user_repo.dart';
 import 'package:snap_chat_copy/repositiry/validation/validation_repository.dart';
 import 'package:snap_chat_copy/utill/exepshon_map.dart';
 
+import '../../../repositiry/mongoDb/user_mongo_repo.dart';
 import '../../../services/Api/api_service.dart';
 
 part 'edit_event.dart';
@@ -14,12 +14,12 @@ var expMsg = ExpMap().expMsg;
 
 class EditBloc extends Bloc<EditEvent, EditState> {
   final ApiService apiService;
-  final UserRepo userRepo;
+  final UserMongoRepo userMongoRepo;
   final ValidationRepo validationRepo;
 
   EditBloc({
     required this.apiService,
-    required this.userRepo,
+    required this.userMongoRepo,
     required this.validationRepo,
   }) : super(EdiiteInitial()) {
     on<EditUserEvent>(_EditUserEvent);
@@ -174,7 +174,7 @@ class EditBloc extends Bloc<EditEvent, EditState> {
         : null;
     // final response =
     await apiService.editUer(user);
-    await userRepo.update(
+    await userMongoRepo.updateUser(
         user,
         ({
           'naem': event.name,

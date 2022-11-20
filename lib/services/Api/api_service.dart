@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter_mongodb_realm/database/database.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:snap_chat_copy/model/country_model.dart';
@@ -8,6 +9,7 @@ import '../../model/user_model.dart';
 import '../../utill/constant.dart';
 
 class ApiService {
+  MongoDocument? countriesListMongo;
   Future<List<Country>> loadCountries() async {
     var _countries = <Country>[];
     final response = await http
@@ -15,6 +17,8 @@ class ApiService {
 
     if (response.statusCode == 200) {
       final countriesJson = jsonDecode(response.body)['countries'] as List;
+      final countriesMongo =
+          jsonDecode(response.body)['countries'] as MongoDocument;
       _countries = countriesJson.map((e) => Country.fromJson(e)).toList();
     }
     return _countries;
