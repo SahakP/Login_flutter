@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 import 'package:snap_chat_copy/notifier/change_notifier.dart';
 
 import '../model/country_model.dart';
@@ -23,6 +23,7 @@ class RenderCountryShowList extends StatefulWidget {
 class _RenderCountryShowListState extends State<RenderCountryShowList> {
   MyChangeNotifier get changeNotif =>
       Provider.of<MyChangeNotifier>(context, listen: false);
+
   Country? selectedCountry;
 
   @override
@@ -35,6 +36,7 @@ class _RenderCountryShowListState extends State<RenderCountryShowList> {
           shrinkWrap: true,
           itemBuilder: (context, index) {
             selectedCountry = widget.countriesList[index];
+// ********SerchingPorcess*********
 
             return (selectedCountry!.name!
                         .toLowerCase()
@@ -43,7 +45,9 @@ class _RenderCountryShowListState extends State<RenderCountryShowList> {
                         .contains(widget.searchText))
                 ? InkWell(
                     onTap: () {
-                      changeNotif.selectCountry(selectedCountry!);
+                      //************************** */
+                      changeNotif.selectCountry(widget.countriesList[index]);
+
                       //changeNotif.selectCountry();
                       //selectCountry(selectedCountry: selectedCountry);
                       Navigator.pop(context);
@@ -84,15 +88,6 @@ class _RenderCountryShowListState extends State<RenderCountryShowList> {
         ),
       ),
     );
-  }
-
-  Future<void> selectCountry() async {
-    final countryPref = await SharedPreferences.getInstance();
-    countryPref.setString('_selectCountryName', selectedCountry!.name!);
-    countryPref.setString(
-        '_selectCountryCountryName', selectedCountry!.countryName!);
-    countryPref.setString(
-        '_selectCountryCountryPhoneCode', selectedCountry!.countryPhoneCode!);
   }
 
   String flagMaker(Country country) {

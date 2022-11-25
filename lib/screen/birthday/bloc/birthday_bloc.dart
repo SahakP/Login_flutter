@@ -5,7 +5,7 @@ part 'birthday_event.dart';
 part 'birthday_state.dart';
 
 class BirthdayBloc extends Bloc<BirthdayEvent, BirthdayState> {
-  ValidationRepo validRepo = ValidationRepo();
+  ValidationRepo validRepo;
   BirthdayBloc({required this.validRepo}) : super(BirthdayInitial()) {
     on<BirthdayDataEvent>(_onBirthdayDataEvent);
   }

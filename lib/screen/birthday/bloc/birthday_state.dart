@@ -6,7 +6,6 @@ class BirthdayInitial extends BirthdayState {}
 
 class BirthdayDataState extends BirthdayState {
   bool isDataValid;
-  final DateTime validDate;
-
+  DateTime validDate;
   BirthdayDataState({required this.isDataValid, required this.validDate});
 }

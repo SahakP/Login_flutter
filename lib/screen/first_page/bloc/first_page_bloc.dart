@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:snap_chat_copy/services/Api/api_service.dart';
+import 'package:snap_chat_copy/services/Api/api_repo.dart';
 
 import '../../../model/user_model.dart';
 import '../../../repositiry/mongoDb/user_mongo_repo.dart';
@@ -10,7 +10,7 @@ part 'first_page_state.dart';
 
 class FirstPageBloc extends Bloc<FirstPageEvent, FirstPageState> {
   UserMongoRepo userRepo = UserMongoRepo();
-  ApiService apiRepo = ApiService();
+  ApiRepo apiRepo = ApiRepo();
 
   FirstPageBloc() : super(FirstPageInitial()) {
     on<LogoutEvent>(_LogoutEvent);
@@ -20,7 +20,8 @@ class FirstPageBloc extends Bloc<FirstPageEvent, FirstPageState> {
 
   Future<void> _LogoutEvent(LogoutEvent event, Emitter emit) async {
     final tokenPref = await SharedPreferences.getInstance();
-    final token = tokenPref.remove('token');
+    // await RealmApp().logout();
+    tokenPref.remove('token');
     emit(LogoutState());
   }
 
@@ -35,7 +36,8 @@ class FirstPageBloc extends Bloc<FirstPageEvent, FirstPageState> {
     if (user != null) {
       await apiRepo.deleteUser();
       await userRepo.deleteUser(user);
-      final token = tokenPref.remove('token');
+      tokenPref.remove('token');
+      //await RealmApp().logout();
     }
     emit(DeleteState());
   }

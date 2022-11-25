@@ -4,20 +4,32 @@ abstract class EmailPhoneState {}
 
 class EmailPhoneInitial extends EmailPhoneState {}
 
-class EmailState extends EmailPhoneState {
-  String emailExpMsg;
-  EmailState({required this.emailExpMsg});
-}
-
-class EmailValidationState extends EmailPhoneState {
-  String emailExpMsg;
-  EmailValidationState({required this.emailExpMsg});
-}
-
+//**************
 class EmailCheckState extends EmailPhoneState {
+  bool isEmailValid;
   String emailExpMsg;
-  EmailCheckState({required this.emailExpMsg});
+  EmailCheckState({required this.emailExpMsg, required this.isEmailValid});
 }
+
+class EmailSuccessState extends EmailPhoneState {
+  bool isEmailValid;
+  String emailExpMsg;
+  EmailSuccessState({required this.emailExpMsg, required this.isEmailValid});
+}
+
+//*******
+class PhoneCheckState extends EmailPhoneState {
+  bool isPhoneValid;
+  String phoneExpMsg;
+  PhoneCheckState({required this.phoneExpMsg, required this.isPhoneValid});
+}
+
+class PhoneSuccessState extends EmailPhoneState {
+  bool isPhoneValid;
+  String phoneExpMsg;
+  PhoneSuccessState({required this.phoneExpMsg, required this.isPhoneValid});
+}
+//****************
 
 class EmailPhoneLoadCountresState extends EmailPhoneState {
   final Country? currentLocation;
@@ -26,17 +38,4 @@ class EmailPhoneLoadCountresState extends EmailPhoneState {
       {required this.countries, required this.currentLocation});
 }
 
-class PhoneValidationState extends EmailPhoneState {
-  String phoneExpMsg;
-  PhoneValidationState({required this.phoneExpMsg});
-}
-
-class PhoneCheckState extends EmailPhoneState {
-  String phoneExpMsg;
-  PhoneCheckState({required this.phoneExpMsg});
-}
-
-class PhoneState extends EmailPhoneState {
-  String phoneExpMsg;
-  PhoneState({required this.phoneExpMsg});
-}
+class LoadinState extends EmailPhoneState {}

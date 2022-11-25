@@ -6,34 +6,38 @@ import '../../model/user_model.dart';
 
 class UserMongoService {
   final MongoRealmClient client = MongoRealmClient();
-  final RealmApp app = RealmApp();
+  //final RealmApp app = RealmApp();
 
   Future<void> insertData(User user) async {
     final tokenPref = await SharedPreferences.getInstance();
     final realmToken = tokenPref.getString('realmToken')!;
-    await RealmApp().login(Credentials.jwt(realmToken));
-    var collection = client.getDatabase('myDb').getCollection('users');
 
-    var document = MongoDocument(user.toMap());
+    await RealmApp().login(Credentials.jwt(realmToken));
+
+    final collection = client.getDatabase('myDb').getCollection('users');
+
+    final document = MongoDocument(user.toMap());
 
     await collection.insertMany([document]);
   }
 
   Future<User> getUser(String userName, String password) async {
-    var collection = client.getDatabase('myDb').getCollection('users');
-    var docs =
+    final collection = client.getDatabase('myDb').getCollection('users');
+    final docs =
         await collection.find(filter: {'name': userName, 'password': password});
     final user = User.fromMap(docs.first.map);
     return user;
   }
 
   Future<void> deleteUser(User user) async {
-    var collection = client.getDatabase('myDb').getCollection('users');
-    var deletedDocs = await collection.deleteOne({'name': user.name});
+    await client
+        .getDatabase('myDb')
+        .getCollection('users')
+        .deleteOne({'name': user.name});
   }
 
   Future<void> updateUser(User user, _doc) async {
-    var collection = client.getDatabase('myDb').getCollection('users');
+    final collection = client.getDatabase('myDb').getCollection('users');
     await collection.updateMany(
         filter: {'name': user.name}, update: UpdateOperator.set(_doc));
   }

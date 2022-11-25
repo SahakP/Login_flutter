@@ -4,17 +4,14 @@ abstract class UsernameState {}
 
 class UsernameInitial extends UsernameState {}
 
-class NameValidationState extends UsernameState {
+class NameSuccessState extends UsernameState {
   String nameExpMsg;
-  NameValidationState({required this.nameExpMsg});
-}
-
-class NameState extends UsernameState {
-  String nameExpMsg;
-  NameState({required this.nameExpMsg});
+  bool isNameValid;
+  NameSuccessState({required this.nameExpMsg, required this.isNameValid});
 }
 
 class NameCheckState extends UsernameState {
+  bool isNameValid;
   String nameExpMsg;
-  NameCheckState({required this.nameExpMsg});
+  NameCheckState({required this.nameExpMsg, required this.isNameValid});
 }

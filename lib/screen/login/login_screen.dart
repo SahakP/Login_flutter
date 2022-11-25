@@ -29,8 +29,6 @@ class _LoginScrenState extends State<LoginScren> {
   bool _isPasswordValid = false;
   var expMsg = ExpMap().expMsg;
 
-  String? findUser;
-
   bool isLoginButtonActive = false;
 
   @override

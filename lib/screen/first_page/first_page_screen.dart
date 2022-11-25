@@ -2,9 +2,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:localization/localization.dart';
+import 'package:provider/provider.dart';
 import 'package:snap_chat_copy/utill/header.dart';
 
 import '../../model/user_model.dart';
+import '../../notifier/change_notifier.dart';
 import '../../utill/home.dart';
 import '../edite_user/edit_screen.dart';
 import 'bloc/first_page_bloc.dart';
@@ -77,7 +79,6 @@ class _FirstPageState extends State<FirstPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   _renderEditeButton(),
-                  // const Expanded(child: SizedBox()),
                   _renderDeleteButton(),
                 ])));
   }
@@ -144,7 +145,7 @@ class _FirstPageState extends State<FirstPage> {
       child: Align(
         alignment: Alignment.topLeft,
         child: Text(
-          'MOBILENUMBER'.i18n() + ': ' + widget.user.phone!,
+          'MOBILENUMBER'.i18n() + ': +' + widget.user.phone!,
           style: const TextStyle(
               color: Colors.black, fontWeight: FontWeight.w800, fontSize: 16),
         ),
@@ -182,7 +183,8 @@ class _FirstPageState extends State<FirstPage> {
 
   Widget _renderLogOutButton() {
     return IconButton(
-        onPressed: () {
+        onPressed: () async {
+          // await RealmApp().logout();
           _bloc.add(LogoutEvent(user: widget.user));
         },
         icon: const Icon(Icons.logout_rounded));
@@ -239,12 +241,13 @@ extension _BlocListener on _FirstPageState {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => EditePage(user: widget.user)));
+              builder: (context) => ChangeNotifierProvider(
+                  create: (context) => MyChangeNotifier(),
+                  child: EditePage(user: widget.user))));
     }
     if (state is DeleteState) {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => const HomePage()));
-      // Fluttertoast.showToast(msg: 'User deleted', gravity: ToastGravity.CENTER);
     }
   }
 }

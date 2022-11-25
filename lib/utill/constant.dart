@@ -5,5 +5,5 @@ class Constant {
   static String nameErrorMsg = 'usernaemErrorMsg'.i18n();
 }
 
-const MONGO_CONN_URL = '<MONGO_URI>';
-const USER_COLLECTION = 'users';
+const mongoCannUrl = '<MONGO_URI>';
+const userColection = 'users';

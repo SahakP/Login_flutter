@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:localization/localization.dart';
 import 'package:snap_chat_copy/repositiry/validation/validation_repository.dart';
 import 'package:snap_chat_copy/screen/username/bloc/username_bloc.dart';
+import 'package:snap_chat_copy/services/Api/api_repo.dart';
 import 'package:snap_chat_copy/utill/back_button.dart';
 import 'package:snap_chat_copy/utill/button_submit.dart';
 import 'package:snap_chat_copy/utill/header.dart';
@@ -21,9 +22,10 @@ class UsernameScreen extends StatefulWidget {
 }
 
 class _UsernameScreenState extends State<UsernameScreen> {
-  final _bloc = UsernameBloc(validRepo: ValidationRepo());
+  final _bloc = UsernameBloc(validRepo: ValidationRepo(), apiRepo: ApiRepo());
+
   String nameExpMsge = 'NameErrorMsg'.i18n();
-  bool isUserValid = false;
+  bool isNameValid = false;
   TextEditingController controllerUsername = TextEditingController();
 
   @override
@@ -108,11 +110,11 @@ class _UsernameScreenState extends State<UsernameScreen> {
         child: Align(
       alignment: FractionalOffset.bottomCenter,
       child: ButtonSubmit(
-        isActive: isUserValid,
+        isActive: isNameValid,
         title: 'Continue'.i18n(),
         onTap: () {
           widget.users.name = controllerUsername.text;
-          isUserValid
+          isNameValid
               ? Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -126,17 +128,13 @@ class _UsernameScreenState extends State<UsernameScreen> {
 
 extension _BlocListener on _UsernameScreenState {
   void _listener(context, state) {
-    if (state is NameState) {
+    if (state is NameSuccessState) {
       nameExpMsge = state.nameExpMsg;
-      isUserValid = true;
-    }
-    if (state is NameValidationState) {
-      nameExpMsge = state.nameExpMsg;
-      isUserValid = false;
+      isNameValid = state.isNameValid;
     }
     if (state is NameCheckState) {
       nameExpMsge = state.nameExpMsg;
-      isUserValid = false;
+      isNameValid = false;
     }
   }
 }

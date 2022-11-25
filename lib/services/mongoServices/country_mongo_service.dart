@@ -1,6 +1,5 @@
 import 'package:flutter_mongodb_realm/flutter_mongo_realm.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:snap_chat_copy/services/Api/api_service.dart';
+import 'package:snap_chat_copy/services/Api/api_repo.dart';
 
 import '../../model/country_model.dart';
 
@@ -8,47 +7,36 @@ class CountryMongoService {
   final MongoRealmClient client = MongoRealmClient();
   final RealmApp app = RealmApp();
 
-
-
-  Future<void> insertCountries() async {
-
-    final tokenPref = await SharedPreferences.getInstance();
-    final realmToken = tokenPref.getString('realmToken')!;
-    await RealmApp().login(Credentials.jwt(realmToken));
-    var collection = client.getDatabase('myDb').getCollection('countries');
-    // var document = MongoDocument(
-    //   country.toMap(),
-    // );
-    await ApiService().loadCountries();
-    await collection.insertMany( [
-      ApiService().countriesListMongo!,
-    ]);
+  Future<void> insertCountries(List<Country> countries) async {
+    final mongodoc = <MongoDocument>[];
+    countries.forEach((country) {
+      mongodoc.add(MongoDocument(country.toMap()));
+    });
+    await client
+        .getDatabase('myDb')
+        .getCollection('countries')
+        .insertMany(mongodoc);
   }
-
-
- 
 
   Future<List<Country>> getCountries() async {
-    final countryList = <Country>[];
-    var collection = client.getDatabase('myDb').getCollection('countries');
-   collection.find(filter: {})
-    country.forEach((element) {
-      countryList.add(Country.fromJson(element));
-    // collection.find(filter: )
-    // var docs =
-    //     await collection.find(filter: {'name': userName, 'password': password});
-   // final countryList = Country.fromJson(collection.);
-    return countryList;
+    final countriesList = <Country>[];
+    // final tokenPref = await SharedPreferences.getInstance();
+    //final realmToken = tokenPref.getString('realmToken')!;
+
+    // await RealmApp().login(Credentials.jwt(realmToken));
+
+    final collection = client.getDatabase('myDb').getCollection('countries');
+    final mongoDocs = await collection.find();
+
+    if (mongoDocs.isEmpty) {
+      final countries = await ApiRepo().loadCountries();
+      await insertCountries(countries);
+      countriesList.addAll(countries);
+    } else {
+      mongoDocs.forEach((docs) {
+        countriesList.add(Country.fromMap(docs.map));
+      });
+    }
+    return countriesList;
   }
-
-  // Future<void> deleteUser(User user) async {
-  //   var collection = client.getDatabase('myDb').getCollection('users');
-  //   var deletedDocs = await collection.deleteOne({'name': user.name});
-  // }
-
-  // Future<void> updateUser(User user, _doc) async {
-  //   var collection = client.getDatabase('myDb').getCollection('users');
-  //   await collection.updateMany(
-  //       filter: {'name': user.name}, update: UpdateOperator.set(_doc));
-  // }
 }

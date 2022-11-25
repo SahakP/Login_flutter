@@ -54,7 +54,7 @@ flutter:
   generate: true
   
   assets:
-     - images/
-     - json/country_codes.json
-     - i18n/en_US.json
-     - i18n/ru_RU.json
+     - assets/images/
+     - assets/json/country_codes.json
+     - assets/localization/en_US.json
+     - assets/localization/ru_RU.json

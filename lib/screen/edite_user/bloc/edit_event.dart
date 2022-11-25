@@ -3,13 +3,13 @@ part of 'edit_bloc.dart';
 abstract class EditEvent {}
 
 class EditUserEvent extends EditEvent {
-  String lastName;
-  String firstName;
-  String phone;
-  String name;
-  String password;
-  String email;
-  String birthday;
+  String? lastName;
+  String? firstName;
+  String? phone;
+  String? name;
+  String? password;
+  String? email;
+  String? birthday;
   User user;
 
   EditUserEvent(
@@ -48,12 +48,12 @@ class FirstNameEvent extends EditEvent {
 }
 
 class NameEvent extends EditEvent {
-  String? name;
+  String name;
   NameEvent({required this.name});
 }
 
 class PhoneEvent extends EditEvent {
-  String? phone;
+  String phone;
   PhoneEvent({required this.phone});
 }
 
@@ -63,6 +63,8 @@ class PasswordEvent extends EditEvent {
 }
 
 class EmailEvent extends EditEvent {
-  String? email;
+  String email;
   EmailEvent({required this.email});
 }
+
+class CountriesEvent extends EditEvent {}

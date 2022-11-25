@@ -1,9 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:localization/localization.dart';
 import 'package:provider/provider.dart';
 import 'package:snap_chat_copy/model/country_model.dart';
 import 'package:snap_chat_copy/repositiry/validation/validation_repository.dart';
+import 'package:snap_chat_copy/services/Api/api_repo.dart';
 import 'package:snap_chat_copy/utill/back_button.dart' show BackBtn;
 import 'package:snap_chat_copy/utill/button_submit.dart';
 import 'package:snap_chat_copy/utill/country_list.dart';
@@ -12,7 +14,6 @@ import 'package:snap_chat_copy/utill/un_focused.dart';
 
 import '../../model/user_model.dart';
 import '../../notifier/change_notifier.dart';
-import '../../repositiry/sql/country_sql_repo.dart';
 import '../username/username_screen.dart';
 import 'bloc/email_phone_bloc.dart';
 
@@ -25,12 +26,12 @@ class EmailOrPhone extends StatefulWidget {
 }
 
 class _EmailOrPhoneState extends State<EmailOrPhone> {
-  final _bloc = EmailPhoneBloc(
-      validRepo: ValidationRepo(), countrySqlRepo: CountrySqlRepo());
+  final _bloc = EmailPhoneBloc(validRepo: ValidationRepo(), apiRepo: ApiRepo());
 
   bool isEmailValid = false;
   bool isPhoneValid = false;
   Country? _selectedCountry;
+  bool isLoading = false;
 
   MyChangeNotifier get changeNotif =>
       Provider.of<MyChangeNotifier>(context, listen: false);
@@ -271,7 +272,7 @@ class _EmailOrPhoneState extends State<EmailOrPhone> {
                       // },
                     ))));
       },
-      child: Text(flagMaker()),
+      child: isLoading ? Text(flagMaker()) : const CupertinoActivityIndicator(),
     );
   }
 
@@ -305,13 +306,18 @@ class _EmailOrPhoneState extends State<EmailOrPhone> {
         isActive: isPhoneValid,
         title: 'Continue'.i18n(),
         onTap: () {
-          widget.user.phone = controllerPhoneNumber.text;
-          widget.user.email = '';
-          isPhoneValid
-              ? Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => UsernameScreen(users: widget.user)))
+          isPhoneValid && isLoading
+              ? {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              UsernameScreen(users: widget.user))),
+                  widget.user.phone = _selectedCountry!.countryPhoneCode +
+                      ' ' +
+                      controllerPhoneNumber.text,
+                  widget.user.email = ''
+                }
               : null;
         },
       ),
@@ -333,14 +339,14 @@ class _EmailOrPhoneState extends State<EmailOrPhone> {
         onTap: () {
           widget.user.email = controllerEmail.text;
           widget.user.phone = '';
-          if (isEmailValid) {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => UsernameScreen(
-                          users: widget.user,
-                        )));
-          }
+          isEmailValid
+              ? Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => UsernameScreen(
+                            users: widget.user,
+                          )))
+              : null;
         },
       ),
     ));
@@ -355,33 +361,32 @@ class _EmailOrPhoneState extends State<EmailOrPhone> {
 
 extension _BlocListener on _EmailOrPhoneState {
   void _listener(context, state) {
-    if (state is EmailState) {
+    if (state is EmailSuccessState) {
       emailExpMsg = state.emailExpMsg;
-      isEmailValid = true;
+      isEmailValid = state.isEmailValid;
     }
-    if (state is EmailValidationState) {
-      emailExpMsg = state.emailExpMsg;
-      isEmailValid = false;
-    }
+
     if (state is EmailCheckState) {
       emailExpMsg = state.emailExpMsg;
-      isEmailValid = false;
+      isEmailValid = state.isEmailValid;
     }
+
+    if (state is PhoneSuccessState) {
+      phoneExpMsg = state.phoneExpMsg;
+      isPhoneValid = state.isPhoneValid;
+    }
+
+    if (state is PhoneCheckState) {
+      phoneExpMsg = state.phoneExpMsg;
+      isPhoneValid = state.isPhoneValid;
+    }
+
+    if (state is LoadinState) {}
+
     if (state is EmailPhoneLoadCountresState) {
       _selectedCountry = state.currentLocation;
       _countries = state.countries;
-    }
-    if (state is PhoneState) {
-      phoneExpMsg = state.phoneExpMsg;
-      isPhoneValid = true;
-    }
-    if (state is PhoneValidationState) {
-      phoneExpMsg = state.phoneExpMsg;
-      isPhoneValid = false;
-    }
-    if (state is PhoneCheckState) {
-      phoneExpMsg = state.phoneExpMsg;
-      isPhoneValid = false;
+      isLoading = true;
     }
   }
 }

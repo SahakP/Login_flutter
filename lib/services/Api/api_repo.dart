@@ -1,15 +1,13 @@
 import 'dart:convert';
-
-import 'package:flutter_mongodb_realm/database/database.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:snap_chat_copy/model/country_model.dart';
+import 'package:snap_chat_copy/model/response_model.dart';
 
 import '../../model/user_model.dart';
 import '../../utill/constant.dart';
 
-class ApiService {
-  MongoDocument? countriesListMongo;
+class ApiRepo {
   Future<List<Country>> loadCountries() async {
     var _countries = <Country>[];
     final response = await http
@@ -17,28 +15,28 @@ class ApiService {
 
     if (response.statusCode == 200) {
       final countriesJson = jsonDecode(response.body)['countries'] as List;
-      final countriesMongo =
-          jsonDecode(response.body)['countries'] as MongoDocument;
       _countries = countriesJson.map((e) => Country.fromJson(e)).toList();
     }
     return _countries;
   }
 
-  Future<String> loadLocation() async {
+  Future<Country> loadLocation() async {
+    final countryList = await loadCountries();
     var currentCountry = '';
     final locale = await http.get(Uri.parse('http://ip-api.com/json'));
     if (locale.statusCode == 200) {
       currentCountry = json.decode(locale.body)['countryCode'].toString();
     }
-    return currentCountry;
+    final userLocation = countryList.firstWhere(
+        (Country country) => country.countryName.contains(currentCountry));
+    return userLocation;
   }
 
-  //String? realmToken;
   Future<User> addUser(User user) async {
     //make uri
-    Uri? addUserUrl = Uri.parse('${Constant.baseUrl}/addUser');
+    final Uri? addUserUrl = Uri.parse('${Constant.baseUrl}/addUser');
     //make header
-    Map<String, String>? header = {'Content-Type': 'application/json'};
+    final header = {'Content-Type': 'application/json'};
     //declare SheredPreferences
     final tokenPref = await SharedPreferences.getInstance();
     //make body
@@ -52,15 +50,14 @@ class ApiService {
       'birthDate': user.birthday.toString()
     });
     //check statusCode
-    final response = await http.post(addUserUrl, headers: header, body: body);
+    final response = await http.post(addUserUrl!, headers: header, body: body);
     if (response.statusCode == 200) {
       //get tocken from body
-      String token = jsonDecode(response.body)['createdTokenForUser'];
-      tokenPref.setString('token', token);
-      // final tokenS= [ token, realmToken];
-      ////tokenPref.setStringList('tokenS', tokenS);
-      String realmToken = jsonDecode(response.body)['realmToken'];
-      tokenPref.setString('realmToken', realmToken);
+      final token = jsonDecode(response.body)['createdTokenForUser'];
+      await tokenPref.setString('token', token);
+
+      final realmToken = jsonDecode(response.body)['realmToken'];
+      await tokenPref.setString('realmToken', realmToken);
 
       //get user from body
       user = User.fromJson((jsonDecode(response.body))['user']);
@@ -72,9 +69,9 @@ class ApiService {
     final tokenPref = await SharedPreferences.getInstance();
     final token = tokenPref.getString('token');
 
-    Uri? editeUserUrl = Uri.parse('${Constant.baseUrl}/editAccount');
+    final Uri? editeUserUrl = Uri.parse('${Constant.baseUrl}/editAccount');
 
-    Map<String, String>? header = {
+    final Map<String, String>? header = {
       'token': token!,
       'Content-Type': 'application/json'
     };
@@ -88,7 +85,8 @@ class ApiService {
       'birthDate': user.birthday.toString()
     });
 
-    final response = await http.post(editeUserUrl, headers: header, body: body);
+    final response =
+        await http.post(editeUserUrl!, headers: header, body: body);
     if (response.statusCode == 200) {
       return user;
     } else {
@@ -96,61 +94,61 @@ class ApiService {
     }
   }
 
-  Future<bool> checkName(String name) async {
-    Uri? nameCheckUrl = Uri.parse('${Constant.baseUrl}/check/name');
+  Future<ResponseModel> checkName(String name) async {
+    final Uri? nameCheckUrl = Uri.parse('${Constant.baseUrl}/check/name');
     final body = jsonEncode({'name': name});
+    final Map<String, String>? header = {'Content-Type': 'application/json'};
 
-    Map<String, String>? header = {'Content-Type': 'application/json'};
-
-    final response = await http.post(nameCheckUrl, headers: header, body: body);
-    if (response.statusCode == 200) {
-      return true;
-    }
-    return false;
+    final response =
+        await http.post(nameCheckUrl!, headers: header, body: body);
+    final resMod = ResponseModel()
+      ..statusCode = response.statusCode
+      ..toMassage(response.body);
+    return resMod;
   }
 
-  Future<bool> checkEmail(String email) async {
-    Uri? emailCheckUrl = Uri.parse('${Constant.baseUrl}/check/email');
+  Future<ResponseModel> checkEmail(String email) async {
+    final Uri? emailCheckUrl = Uri.parse('${Constant.baseUrl}/check/email');
     final body = jsonEncode({'email': email});
-    Map<String, String>? header = {'Content-Type': 'application/json'};
+    final Map<String, String>? header = {'Content-Type': 'application/json'};
 
     final response =
-        await http.post(emailCheckUrl, headers: header, body: body);
-    if (response.statusCode == 200) {}
-    // else{
-    //   if(response.statusCode == 500){
-    //   }
-    // }
-    return true;
+        await http.post(emailCheckUrl!, headers: header, body: body);
+    final resMod = ResponseModel()
+      ..statusCode = response.statusCode
+      ..toMassage(response.body);
+
+    return resMod;
   }
 
-  Future<bool> checkPhone(String phone) async {
-    Uri? phoneCheckUrl = Uri.parse('${Constant.baseUrl}/check/phone');
+  Future<ResponseModel> checkPhone(String phone) async {
+    final Uri? phoneCheckUrl = Uri.parse('${Constant.baseUrl}/check/phone');
     final body = jsonEncode({'phone': phone});
-    Map<String, String>? header = {'Content-Type': 'application/json'};
+    final Map<String, String>? header = {'Content-Type': 'application/json'};
 
     final response =
-        await http.post(phoneCheckUrl, headers: header, body: body);
-    if (response.statusCode == 200) {}
-    // else{
-    //   if(response.statusCode == 500){
-    //   }
-    // }
-    return true;
+        await http.post(phoneCheckUrl!, headers: header, body: body);
+    final resMod = ResponseModel()
+      ..statusCode = response.statusCode
+      ..toMassage(response.body);
+
+    return resMod;
   }
 
   Future<User?> signin(String login, String password) async {
-    Uri? signinUrl = Uri.parse('${Constant.baseUrl}/signin');
-    Map<String, String>? header = {'Content-Type': 'application/json'};
+    final signinUrl = Uri.parse('${Constant.baseUrl}/signin');
+    final Map<String, String>? header = {'Content-Type': 'application/json'};
     final body = jsonEncode({'login': login, 'password': password});
+
     final tokenPref = await SharedPreferences.getInstance();
-    var user;
+    User? user;
+
     final response = await http.post(signinUrl, headers: header, body: body);
     if (response.statusCode == 200) {
-      String token = jsonDecode(response.body)['createdTokenForUser'];
+      final String token = jsonDecode(response.body)['createdTokenForUser'];
       tokenPref.setString('token', token);
 
-      String realmToken = jsonDecode(response.body)['realmToken'];
+      final String realmToken = jsonDecode(response.body)['realmToken'];
       tokenPref.setString('realmToken', realmToken);
 
       user = User.fromJson((jsonDecode(response.body))['user']);
@@ -162,13 +160,13 @@ class ApiService {
     final tokenPref = await SharedPreferences.getInstance();
     final token = tokenPref.getString('token');
 
-    Uri? userUri = Uri.parse('${Constant.baseUrl}/me');
+    final Uri? userUri = Uri.parse('${Constant.baseUrl}/me');
 
-    Map<String, String>? header = {'token': token!};
+    final Map<String, String>? header = {'token': token!};
 
     User? user;
 
-    final response = await http.get(userUri, headers: header);
+    final response = await http.get(userUri!, headers: header);
 
     if (response.statusCode == 200) {
       user = User.fromJson(jsonDecode(response.body)['user']);
@@ -179,10 +177,10 @@ class ApiService {
   Future<void> deleteUser() async {
     final tokenPref = await SharedPreferences.getInstance();
     final token = tokenPref.getString('token');
-    Uri? deleteUri = Uri.parse('${Constant.baseUrl}/delete/user');
+    final Uri? deleteUri = Uri.parse('${Constant.baseUrl}/delete/user');
 
-    Map<String, String>? header = {'token': token!};
-    final response = await http.delete(deleteUri, headers: header);
+    final Map<String, String>? header = {'token': token!};
+    final response = await http.delete(deleteUri!, headers: header);
     if (response.statusCode == 200) {
       tokenPref.remove(token);
     }

@@ -30,10 +30,10 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
   TextEditingController controllerBirthday = TextEditingController();
 
   final _bloc = BirthdayBloc(validRepo: ValidationRepo());
-  var expMsg = ExpMap().expMsg;
+  Map<String, String> expMsg = ExpMap().expMsg;
   bool isBirthdayDataValid = true;
 
-  late DateTime validDate;
+  DateTime? validDate;
 
   @override
   void initState() {
@@ -88,7 +88,6 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
           style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
           decoration: InputDecoration(
             labelText: 'BIRTHDAY'.i18n(),
-            // MyLocalizations.of(context)!.BIRTHDAY,
             labelStyle: const TextStyle(
               color: Color.fromARGB(255, 154, 160, 167),
             ),
@@ -159,7 +158,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
 
   String get _validFormatDate {
     final formatter = DateFormat('dd MMMM yyyy');
-    final tFData = formatter.format(validDate);
+    final tFData = formatter.format(validDate!);
     return tFData;
   }
 }

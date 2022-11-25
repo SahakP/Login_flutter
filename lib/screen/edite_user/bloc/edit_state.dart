@@ -29,52 +29,55 @@ class FirstNameState extends EditState {
   FirstNameState({required this.isFirstNameValid});
 }
 
-class NameValidationState extends EditState {
+//_____________________________
+class NameSuccessState extends EditState {
   String nameExpMsg;
-  NameValidationState({required this.nameExpMsg});
-}
-
-class NameState extends EditState {
-  String nameExpMsg;
-  NameState({required this.nameExpMsg});
+  bool isNameValid;
+  NameSuccessState({required this.nameExpMsg, required this.isNameValid});
 }
 
 class NameCheckState extends EditState {
+  bool isNameValid;
   String nameExpMsg;
-  NameCheckState({required this.nameExpMsg});
+  NameCheckState({required this.nameExpMsg, required this.isNameValid});
 }
 
-class PhoneState extends EditState {
-  String phoneExpMsg;
-  PhoneState({required this.phoneExpMsg});
+//_____________________________
+class EmailCheckState extends EditState {
+  bool isEmailValid;
+  String emailExpMsg;
+  EmailCheckState({required this.emailExpMsg, required this.isEmailValid});
 }
 
-class PhoneValidationState extends EditState {
-  String phoneExpMsg;
-  PhoneValidationState({required this.phoneExpMsg});
+class EmailSuccessState extends EditState {
+  bool isEmailValid;
+  String emailExpMsg;
+  EmailSuccessState({required this.emailExpMsg, required this.isEmailValid});
 }
 
+//_______________________________
 class PhoneCheckState extends EditState {
+  bool isPhoneValid;
   String phoneExpMsg;
-  PhoneCheckState({required this.phoneExpMsg});
+  PhoneCheckState({required this.phoneExpMsg, required this.isPhoneValid});
 }
 
+class PhoneSuccessState extends EditState {
+  bool isPhoneValid;
+  String phoneExpMsg;
+  PhoneSuccessState({required this.phoneExpMsg, required this.isPhoneValid});
+}
+
+//________________________________
 class PasswordState extends EditState {
   bool isPassValid;
   PasswordState({required this.isPassValid});
 }
 
-class EmailState extends EditState {
-  String emailExpMsg;
-  EmailState({required this.emailExpMsg});
+class CountriesState extends EditState {
+  final Country? currentLocation;
+  List<Country> countries;
+  CountriesState({required this.countries, required this.currentLocation});
 }
 
-class EmailValidationState extends EditState {
-  String emailExpMsg;
-  EmailValidationState({required this.emailExpMsg});
-}
-
-class EmailCheckState extends EditState {
-  String emailExpMsg;
-  EmailCheckState({required this.emailExpMsg});
-}
+class LoadinState extends EditState {}

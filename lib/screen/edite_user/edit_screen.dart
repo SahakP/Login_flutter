@@ -4,13 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:localization/localization.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-//import 'package:path/path.dart';
+import 'package:provider/provider.dart';
+import 'package:snap_chat_copy/repositiry/mongoDb/country_mongo_repo.dart';
+
 import 'package:snap_chat_copy/repositiry/validation/validation_repository.dart';
 
+import '../../model/country_model.dart';
 import '../../model/user_model.dart';
+import '../../notifier/change_notifier.dart';
 import '../../repositiry/mongoDb/user_mongo_repo.dart';
-import '../../services/Api/api_service.dart';
+import '../../services/Api/api_repo.dart';
+import '../../utill/country_list.dart';
 import '../../utill/exepshon_map.dart';
 import '../../utill/header.dart';
 import '../../utill/un_focused.dart';
@@ -27,10 +31,6 @@ class EditePage extends StatefulWidget {
 }
 
 class _EditePageState extends State<EditePage> {
-  final apiRepo = ApiService();
-  final userRepo = UserMongoRepo();
-  final validationRepo = ValidationRepo();
-
   TextEditingController passwordController = TextEditingController();
   TextEditingController naemController = TextEditingController();
   TextEditingController firstNameController = TextEditingController();
@@ -38,30 +38,45 @@ class _EditePageState extends State<EditePage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController birthdayController = TextEditingController();
-  late EditBloc _bloc;
+
+  var apiService = ApiRepo();
+  final userRepo = UserMongoRepo();
+  final validationRepo = ValidationRepo();
+  final countryRepo = CountryMongoRepo();
+
+  bool isFirstNameValid = false;
   bool isLastNameValid = false;
   bool isBirthdayValid = true;
-  var _birthday;
-  bool isFirstNameValid = false;
   bool isNameValid = false;
-  bool isNameChecked = false;
-
   bool isPhoneValid = false;
+  bool isEmailValid = false;
   bool isPassValid = false;
-  bool isEmailVAlid = false;
+  //TODO: make it fals logic
+  bool isLoading = true;
+
   var expMsg = ExpMap().expMsg;
+  var _birthday;
   String nameExpMsge = 'NameErrorMsg'.i18n();
   String phoneExpMsg = 'usernaemErrorMsg'.i18n();
   String emailExpMsg = 'emailErrorMsg'.i18n();
-  //var expMsg = ExpMap().expMsg;
-  // String? expMsg;
+
+  MyChangeNotifier get changeNotif =>
+      Provider.of<MyChangeNotifier>(context, listen: false);
+
+  Country? _selectedCountry;
+
+  List<Country> _countries = [];
+
+  final _bloc = EditBloc(
+      countryMongoRepo: CountryMongoRepo(),
+      apiRepo: ApiRepo(),
+      userMongoRepo: UserMongoRepo(),
+      validRepo: ValidationRepo());
 
   @override
   void initState() {
-    _bloc = EditBloc(
-        apiService: apiRepo,
-        userMongoRepo: userRepo,
-        validationRepo: validationRepo);
+    changeNotif.addListener(_onChange);
+    _bloc.add(CountriesEvent());
     super.initState();
   }
 
@@ -150,6 +165,43 @@ class _EditePageState extends State<EditePage> {
     ]);
   }
 
+  Widget _renderFirstName() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 5),
+      child: Column(
+        children: [
+          TextField(
+            controller: firstNameController,
+            onChanged: (value) {
+              _bloc.add(FirstNameEvent(firstName: firstNameController.text));
+            },
+            style: const TextStyle(
+                color: Colors.black, fontWeight: FontWeight.w800, fontSize: 16),
+            decoration: InputDecoration(
+              labelText: 'First name: ${widget.user.firstName}',
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _renderFirstNameErrorMsg() {
+    return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+      Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 40,
+          ),
+          child: Text(
+            !isFirstNameValid ? 'usernaemErrorMsg'.i18n() : '',
+            style: const TextStyle(
+                color: Color.fromARGB(255, 185, 193, 199),
+                fontWeight: FontWeight.w700,
+                fontSize: 12),
+          ))
+    ]);
+  }
+
   Widget _renderBDate() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 5),
@@ -163,7 +215,7 @@ class _EditePageState extends State<EditePage> {
                   context: context, builder: (_) => _renderDataPicker());
             },
             style: const TextStyle(
-                color: Colors.black, fontWeight: FontWeight.w800, fontSize: 18),
+                color: Colors.black, fontWeight: FontWeight.w800, fontSize: 16),
             decoration: InputDecoration(
               labelText:
                   'Birth date: ${DateFormat('dd MMMM yyyy').format(widget.user.birthday!)}',
@@ -233,197 +285,9 @@ class _EditePageState extends State<EditePage> {
     ]);
   }
 
-  Widget _renderFirstName() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-      child: Column(
-        children: [
-          TextField(
-            controller: firstNameController,
-            onChanged: (value) {
-              _bloc.add(FirstNameEvent(firstName: firstNameController.text));
-            },
-            style: const TextStyle(
-                color: Colors.black, fontWeight: FontWeight.w800, fontSize: 16),
-            decoration: InputDecoration(
-              labelText: 'First name: ${widget.user.firstName}',
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _renderFirstNameErrorMsg() {
-    return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-      Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 40,
-          ),
-          child: Text(
-            !isFirstNameValid ? 'usernaemErrorMsg'.i18n() : '',
-            style: const TextStyle(
-                color: Color.fromARGB(255, 185, 193, 199),
-                fontWeight: FontWeight.w700,
-                fontSize: 12),
-          ))
-    ]);
-  }
-
-  Widget _renderEmail() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-      child: Column(
-        children: [
-          TextField(
-            controller: emailController,
-            onChanged: (value) {
-              _bloc.add(EmailEvent(email: emailController.text));
-            },
-            style: const TextStyle(
-                color: Colors.black, fontWeight: FontWeight.w800, fontSize: 16),
-            decoration:
-                InputDecoration(labelText: 'Email: ${widget.user.email} '),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _renderEmailErrorMsg() {
-    return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-      Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 40,
-          ),
-          child: Text(
-            !isEmailVAlid ? 'emailErrorMsg'.i18n() : '',
-            style: const TextStyle(
-                color: Color.fromARGB(255, 185, 193, 199),
-                fontWeight: FontWeight.w700,
-                fontSize: 12),
-          ))
-    ]);
-  }
-
-  Widget _renderPhone() {
-    return Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-      Expanded(
-          child: Align(
-              alignment: FractionalOffset.centerLeft,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 35),
-                child: _countryList(),
-              ))),
-      Expanded(
-          child: Align(
-              alignment: FractionalOffset.topLeft,
-              child: Padding(
-                padding: const EdgeInsets.only(right: 0),
-                child: _renderPhoneNumberTF(),
-              ))),
-      const Expanded(
-          child: Align(
-        alignment: FractionalOffset.centerRight,
-        child: Text(''),
-      ))
-    ]);
-  }
-
-  Widget _countryList() {
-    return TextButton(
-      style: TextButton.styleFrom(
-        textStyle: const TextStyle(fontSize: 16),
-      ),
-      onPressed: () {
-        //   Navigator.push(
-        //       context,
-        //       MaterialPageRoute(
-        //           builder: (context) => ChangeNotifierProvider.value(
-        //               value: changeNotif,
-        //               child: CountryList(
-        //                 //valueNotif: changeNotif,
-        //                 countriesList: _countries,
-        //                 // country: (Country country) {
-        //                 //   setState(() {
-        //                 //     _selectedCountry = country;
-        //                 //   });
-        //                 // },
-        //               ))));
-      },
-      child: Text('flagMaker()'),
-    );
-  }
-
-  //TODO: country list stanal mongoyov
-
-  // String flagMaker() {
-  //   final country =' _selectedCountry';
-  //   if (country == null) {
-  //     return '';
-  //   }
-
-  //   final flag = country.countryName.toUpperCase().replaceAllMapped(
-  //       RegExp(r'[A-Z]'),
-  //       (match) => String.fromCharCode(match.group(0)!.codeUnitAt(0) + 127397));
-
-  //   return flag + ' +' + country.countryPhoneCode;
-  // }
-
-  Widget _renderPhoneNumberTF() {
-    return TextField(
-      decoration: const InputDecoration(
-        border: InputBorder.none,
-      ),
-      autofocus: true,
-      keyboardType: TextInputType.number,
-      controller: phoneController,
-      onChanged: (value) {
-        _bloc.add(PhoneEvent(phone: phoneController.text));
-      },
-      style: const TextStyle(
-          color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
-    );
-  }
-
-  //   return Padding(
-  //     padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-  //     child: Column(
-  //       children: [
-  //         TextField(
-  //           controller: phoneController,
-  //           onChanged: (value) {
-  //             _bloc.add(PhoneEvent(phone: phoneController.text));
-  //           },
-  //           style: const TextStyle(
-  //               color: Colors.black, fontWeight: FontWeight.w800, fontSize: 16),
-  //           decoration: InputDecoration(
-  //               labelText: 'Phone number: ${widget.user.phone}'),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
-
-  Widget _renderPhoneErrorMsg() {
-    return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-      Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 40,
-          ),
-          child: Text(
-            phoneExpMsg,
-            style: const TextStyle(
-                color: Color.fromARGB(255, 185, 193, 199),
-                fontWeight: FontWeight.w700,
-                fontSize: 12),
-          ))
-    ]);
-  }
-
   Widget _renderName() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 5),
       child: Column(
         children: [
           TextField(
@@ -448,6 +312,79 @@ class _EditePageState extends State<EditePage> {
           ),
           child: Text(
             nameExpMsge,
+            style: const TextStyle(
+                color: Color.fromARGB(255, 185, 193, 199),
+                fontWeight: FontWeight.w700,
+                fontSize: 12),
+          ))
+    ]);
+  }
+
+  Widget _renderPhone() {
+    return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 5),
+        child: Column(children: [
+          TextField(
+            keyboardType: TextInputType.number,
+            controller: phoneController,
+            onChanged: (value) {
+              _bloc.add(PhoneEvent(phone: phoneController.text));
+            },
+            style: const TextStyle(
+                color: Colors.black, fontWeight: FontWeight.w800, fontSize: 16),
+            decoration: InputDecoration(
+                prefix: _countryList(),
+                labelText: 'Phone: +${widget.user.phone}'),
+          )
+        ]));
+  }
+
+  Widget _countryList() {
+    return TextButton(
+      style: TextButton.styleFrom(
+        textStyle: const TextStyle(fontSize: 16),
+      ),
+      onPressed: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ChangeNotifierProvider.value(
+                    value: changeNotif,
+                    child: CountryList(
+                      countriesList: _countries,
+                    ))));
+      },
+      child: isLoading ? const CupertinoActivityIndicator() : Text(flagMaker()),
+    );
+  }
+
+  String flagMaker() {
+    final country = _selectedCountry;
+
+    if (country == null) {
+      return '';
+    }
+
+    final flag = country.countryName.toUpperCase().replaceAllMapped(
+        RegExp(r'[A-Z]'),
+        (match) => String.fromCharCode(match.group(0)!.codeUnitAt(0) + 127397));
+
+    return flag + ' +' + country.countryPhoneCode;
+  }
+
+  void _onChange() {
+    _selectedCountry = changeNotif.country;
+    setState(() {});
+  }
+
+  Widget _renderPhoneErrorMsg() {
+    return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+      Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 40,
+          ),
+          child: Text(
+            phoneExpMsg,
             style: const TextStyle(
                 color: Color.fromARGB(255, 185, 193, 199),
                 fontWeight: FontWeight.w700,
@@ -492,6 +429,42 @@ class _EditePageState extends State<EditePage> {
     ]);
   }
 
+  Widget _renderEmail() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+      child: Column(
+        children: [
+          TextField(
+            controller: emailController,
+            onChanged: (value) {
+              _bloc.add(EmailEvent(email: emailController.text));
+            },
+            style: const TextStyle(
+                color: Colors.black, fontWeight: FontWeight.w800, fontSize: 16),
+            decoration:
+                InputDecoration(labelText: 'Email: ${widget.user.email} '),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _renderEmailErrorMsg() {
+    return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+      Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 40,
+          ),
+          child: Text(
+            !isEmailValid ? 'emailErrorMsg'.i18n() : '',
+            style: const TextStyle(
+                color: Color.fromARGB(255, 185, 193, 199),
+                fontWeight: FontWeight.w700,
+                fontSize: 12),
+          ))
+    ]);
+  }
+
   Widget _renderSaveButton() {
     return ConstrainedBox(
         constraints: const BoxConstraints.tightFor(width: 120, height: 50),
@@ -506,14 +479,18 @@ class _EditePageState extends State<EditePage> {
             style: ElevatedButton.styleFrom(
                 backgroundColor: const Color.fromARGB(255, 36, 174, 252)),
             onPressed: () => _bloc.add(EditUserEvent(
-                  lastName: lastNameController.text,
-                  firstName: firstNameController.text,
-                  name: naemController.text,
-                  email: emailController.text,
-                  phone: phoneController.text,
+                  lastName: isLastNameValid ? null : lastNameController.text,
+                  firstName: isFirstNameValid ? null : firstNameController.text,
+                  name: isNameValid ? null : naemController.text,
+                  email: isEmailValid ? null : emailController.text,
+                  phone: isPhoneValid
+                      ? null
+                      : _selectedCountry!.countryPhoneCode +
+                          ' ' +
+                          phoneController.text,
+                  password: isPassValid ? null : passwordController.text,
+                  birthday: !isBirthdayValid ? null : birthdayController.text,
                   user: widget.user,
-                  password: passwordController.text,
-                  birthday: birthdayController.text,
                 ))));
   }
 
@@ -563,35 +540,45 @@ extension _BlocListener on _EditePageState {
     if (state is FirstNameState) {
       isFirstNameValid = state.isFirstNameValid;
     }
-    if (state is NameValidationState) {
+
+    if (state is NameSuccessState) {
       nameExpMsge = state.nameExpMsg;
-    }
-    if (state is NameState) {
-      nameExpMsge = state.nameExpMsg;
+      isNameValid = state.isNameValid;
     }
     if (state is NameCheckState) {
       nameExpMsge = state.nameExpMsg;
+      isNameValid = state.isNameValid;
     }
-    if (state is PhoneState) {
+
+    if (state is PhoneSuccessState) {
       phoneExpMsg = state.phoneExpMsg;
+      isPhoneValid = state.isPhoneValid;
     }
-    if (state is PhoneValidationState) {
-      phoneExpMsg = state.phoneExpMsg;
-    }
+
     if (state is PhoneCheckState) {
       phoneExpMsg = state.phoneExpMsg;
+      isPhoneValid = state.isPhoneValid;
     }
+
+    if (state is EmailSuccessState) {
+      emailExpMsg = state.emailExpMsg;
+      isEmailValid = state.isEmailValid;
+    }
+
+    if (state is EmailCheckState) {
+      emailExpMsg = state.emailExpMsg;
+      isEmailValid = state.isEmailValid;
+    }
+
     if (state is PasswordState) {
       isPassValid = state.isPassValid;
     }
-    if (state is EmailState) {
-      emailExpMsg = state.emailExpMsg;
+
+    if (state is CountriesState) {
+      _countries = state.countries;
+      _selectedCountry = state.currentLocation;
+      isLoading = false;
     }
-    if (state is EmailValidationState) {
-      emailExpMsg = state.emailExpMsg;
-    }
-    if (state is EmailCheckState) {
-      emailExpMsg = state.emailExpMsg;
-    }
+    if (state is LoadinState) {}
   }
 }
