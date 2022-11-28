@@ -45,11 +45,8 @@ class _RenderCountryShowListState extends State<RenderCountryShowList> {
                         .contains(widget.searchText))
                 ? InkWell(
                     onTap: () {
-                      //************************** */
                       changeNotif.selectCountry(widget.countriesList[index]);
 
-                      //changeNotif.selectCountry();
-                      //selectCountry(selectedCountry: selectedCountry);
                       Navigator.pop(context);
                     },
                     child: Padding(

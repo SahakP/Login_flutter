@@ -9,7 +9,7 @@ import '../../../utill/exepshon_map.dart';
 part 'email_phone_event.dart';
 part 'email_phone_state.dart';
 
-var expMsg = ExpMap().expMsg;
+Map<String, String> expMsg = ExpMap().expMsg;
 
 class EmailPhoneBloc extends Bloc<EmailPhoneEvent, EmailPhoneState> {
   ValidationRepo validRepo;

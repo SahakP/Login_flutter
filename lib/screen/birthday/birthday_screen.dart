@@ -32,7 +32,6 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
   final _bloc = BirthdayBloc(validRepo: ValidationRepo());
   Map<String, String> expMsg = ExpMap().expMsg;
   bool isBirthdayDataValid = true;
-
   DateTime? validDate;
 
   @override

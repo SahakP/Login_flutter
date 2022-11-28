@@ -5,11 +5,11 @@ abstract class SignUpState {}
 class SignUpInitial extends SignUpState {}
 
 class FiratNameState extends SignUpState {
-  final bool isFirstNameValid;
+  bool isFirstNameValid;
   FiratNameState({required this.isFirstNameValid});
 }
 
 class LastNameState extends SignUpState {
-  final bool isLastNameValid;
+  bool isLastNameValid;
   LastNameState({required this.isLastNameValid});
 }

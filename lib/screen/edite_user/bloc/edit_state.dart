@@ -4,9 +4,9 @@ abstract class EditState {}
 
 class EdiiteInitial extends EditState {}
 
-class EditUserState extends EditState {
+class SaveUserState extends EditState {
   User? user;
-  EditUserState({required this.user});
+  SaveUserState({required this.user});
 }
 
 class CancelState extends EditState {}

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:localization/localization.dart';
 import 'package:snap_chat_copy/model/user_model.dart';
+import 'package:snap_chat_copy/repositiry/mongoDb/user_mongo_repo.dart';
 import 'package:snap_chat_copy/repositiry/validation/validation_repository.dart';
+import 'package:snap_chat_copy/services/Api/api_repo.dart';
 import 'package:snap_chat_copy/utill/back_button.dart';
 import 'package:snap_chat_copy/utill/button_submit.dart';
 import 'package:snap_chat_copy/utill/header.dart';
@@ -24,13 +26,15 @@ class PasswordScreen extends StatefulWidget {
 }
 
 class _PasswordScreenState extends State<PasswordScreen> {
-  //UserRepo db = UserRepo();
   User? user;
-  var expMsg = ExpMap().expMsg;
-
-  final _bloc = PasswordBloc(validRepo: ValidationRepo());
+  Map<String, String> expMsg = ExpMap().expMsg;
   bool isPasswordValid = false;
   TextEditingController controllerPassword = TextEditingController();
+
+  final _bloc = PasswordBloc(
+      validRepo: ValidationRepo(),
+      apiRepo: ApiRepo(),
+      userMongoRepo: UserMongoRepo());
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +61,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
               _renderUnderHeaderText(),
               _renderPasswordTF(),
               _renderPasswordErrorMsg(),
-              _submitButton(),
+              _renderPasswordButton(),
             ],
           ),
         ])));
@@ -110,7 +114,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
     );
   }
 
-  Widget _submitButton() {
+  Widget _renderPasswordButton() {
     return Expanded(
         child: Align(
       alignment: FractionalOffset.bottomCenter,

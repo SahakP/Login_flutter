@@ -55,7 +55,7 @@ class _UsernameScreenState extends State<UsernameScreen> {
               _renderUnderHeaderText(),
               _renderUsernameTF(),
               _renderUsernameErrorMsg(),
-              _submitButton(),
+              _renderNameButton(),
             ],
           ),
         ])));
@@ -105,7 +105,7 @@ class _UsernameScreenState extends State<UsernameScreen> {
     );
   }
 
-  Widget _submitButton() {
+  Widget _renderNameButton() {
     return Expanded(
         child: Align(
       alignment: FractionalOffset.bottomCenter,
@@ -113,12 +113,15 @@ class _UsernameScreenState extends State<UsernameScreen> {
         isActive: isNameValid,
         title: 'Continue'.i18n(),
         onTap: () {
-          widget.users.name = controllerUsername.text;
           isNameValid
-              ? Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => PasswordScreen(user: widget.users)))
+              ? {
+                  widget.users.name = controllerUsername.text,
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              PasswordScreen(user: widget.users)))
+                }
               : null;
         },
       ),

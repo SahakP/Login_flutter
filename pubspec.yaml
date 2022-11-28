@@ -56,5 +56,5 @@ flutter:
   assets:
      - assets/images/
      - assets/json/country_codes.json
-     - assets/localization/en_US.json
-     - assets/localization/ru_RU.json
+     - assets/locales/en_US.json
+     - assets/locales/ru_RU.json

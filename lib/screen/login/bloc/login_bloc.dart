@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter_mongodb_realm/realm_app.dart';
 import 'package:snap_chat_copy/model/user_model.dart';
-//import 'package:snap_chat_copy/repositiry/user_repo.dart';
 import 'package:snap_chat_copy/repositiry/validation/validation_repository.dart';
 import 'package:snap_chat_copy/services/Api/api_repo.dart';
 
@@ -11,12 +10,15 @@ part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  final ValidationRepo validRepo;
-  ApiRepo apiRepo = ApiRepo();
-  // UserRepo userRepo = UserRepo();
-  UserMongoRepo userMongoRepo = UserMongoRepo();
+  ValidationRepo validRepo;
+  ApiRepo apiRepo;
+  UserMongoRepo userMongoRepo;
 
-  LoginBloc({required this.validRepo}) : super(LoginInitialState()) {
+  LoginBloc(
+      {required this.validRepo,
+      required this.apiRepo,
+      required this.userMongoRepo})
+      : super(LoginInitialState()) {
     on<UserNameEvent>(_onUserNameEvent);
 
     on<PasswordTFEvent>(_onPasswordEvent);
@@ -36,11 +38,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   Future<void> _onLogInButtonEvent(LogInButtonEvent event, Emitter emit) async {
     await RealmApp.init('application-0-tbwaj');
     final user = await apiRepo.signin(event.userName, event.password);
-    await userMongoRepo.getUser(event.userName, event.password);
+    await userMongoRepo.createUser(user!);
 
     emit(ButtonState(user: user));
   }
 }
-
-
-//await userRepo.getUser(event.userName, event.password)

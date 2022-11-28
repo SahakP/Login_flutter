@@ -5,7 +5,7 @@ abstract class PasswordState {}
 class PasswordInitial extends PasswordState {}
 
 class PassState extends PasswordState {
-  final bool IsPasswordValid;
+  bool IsPasswordValid;
   PassState({required this.IsPasswordValid});
 }
 

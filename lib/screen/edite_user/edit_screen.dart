@@ -134,7 +134,6 @@ class _EditePageState extends State<EditePage> {
       child: Column(
         children: [
           TextField(
-            // autofocus: true,
             controller: lastNameController,
             onChanged: (value) {
               _bloc.add(LastNameEvent(lastName: value));
@@ -478,18 +477,16 @@ class _EditePageState extends State<EditePage> {
             ),
             style: ElevatedButton.styleFrom(
                 backgroundColor: const Color.fromARGB(255, 36, 174, 252)),
-            onPressed: () => _bloc.add(EditUserEvent(
-                  lastName: isLastNameValid ? null : lastNameController.text,
-                  firstName: isFirstNameValid ? null : firstNameController.text,
-                  name: isNameValid ? null : naemController.text,
-                  email: isEmailValid ? null : emailController.text,
-                  phone: isPhoneValid
-                      ? null
-                      : _selectedCountry!.countryPhoneCode +
-                          ' ' +
-                          phoneController.text,
-                  password: isPassValid ? null : passwordController.text,
-                  birthday: !isBirthdayValid ? null : birthdayController.text,
+            onPressed: () => _bloc.add(SaveUserEvent(
+                  lastName: lastNameController.text,
+                  firstName: firstNameController.text,
+                  name: naemController.text,
+                  email: emailController.text,
+                  phone: _selectedCountry!.countryPhoneCode +
+                      ' ' +
+                      phoneController.text,
+                  password: passwordController.text,
+                  birthday: birthdayController.text,
                   user: widget.user,
                 ))));
   }
@@ -518,7 +515,7 @@ class _EditePageState extends State<EditePage> {
 
 extension _BlocListener on _EditePageState {
   void _listener(context, state) {
-    if (state is EditUserState) {
+    if (state is SaveUserState) {
       widget.user = state.user!;
       Navigator.push(
           context,

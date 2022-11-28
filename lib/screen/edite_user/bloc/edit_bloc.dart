@@ -12,13 +12,14 @@ import '../../../services/Api/api_repo.dart';
 part 'edit_event.dart';
 part 'edit_state.dart';
 
-final expMsg = ExpMap().expMsg;
+Map<String, String> expMsg = ExpMap().expMsg;
+ResponseModel? resModel;
 
 class EditBloc extends Bloc<EditEvent, EditState> {
-  final ApiRepo apiRepo;
-  final UserMongoRepo userMongoRepo;
-  final CountryMongoRepo countryMongoRepo;
-  final ValidationRepo validRepo;
+  ApiRepo apiRepo;
+  UserMongoRepo userMongoRepo;
+  CountryMongoRepo countryMongoRepo;
+  ValidationRepo validRepo;
 
   EditBloc(
       {required this.apiRepo,
@@ -26,7 +27,7 @@ class EditBloc extends Bloc<EditEvent, EditState> {
       required this.validRepo,
       required this.countryMongoRepo})
       : super(EdiiteInitial()) {
-    on<EditUserEvent>(_EditUserEvent);
+    on<SaveUserEvent>(_SaveUserEvent);
     on<BirthdayEvent>(_BirthdayEvent);
     on<CancelEvent>(_CancelEvent);
     on<LastNameEvent>(_LastNameEvent);
@@ -74,14 +75,14 @@ class EditBloc extends Bloc<EditEvent, EditState> {
       resModel = await apiRepo.checkPhone(event.phone);
 
       if (resModel.statusCode == 200) {
-        emit(EmailSuccessState(emailExpMsg: resModel.msg!, isEmailValid: true));
+        emit(PhoneSuccessState(phoneExpMsg: resModel.msg!, isPhoneValid: true));
       }
       if (resModel.statusCode == 500) {
-        emit(EmailCheckState(emailExpMsg: resModel.msg!, isEmailValid: false));
+        emit(PhoneCheckState(phoneExpMsg: resModel.msg!, isPhoneValid: false));
       }
     } else {
-      emit(EmailCheckState(
-          emailExpMsg: expMsg['phoneValid']!, isEmailValid: false));
+      emit(PhoneCheckState(
+          phoneExpMsg: expMsg['phoneValid']!, isPhoneValid: false));
     }
   }
 
@@ -110,18 +111,13 @@ class EditBloc extends Bloc<EditEvent, EditState> {
 
   Future<void> _LastNameEvent(LastNameEvent event, Emitter emit) async {
     if (validRepo.lastNameValidation(event.lastName!)) {
-      return emit(LastNameState(lastNameValid: true));
+      emit(LastNameState(lastNameValid: true));
     } else {
       emit(LastNameState(lastNameValid: false));
     }
   }
 
   Future<void> _CancelEvent(CancelEvent event, Emitter emit) async {
-    User? user;
-    user = await apiRepo.getUser();
-    if (user != null) {
-      await apiRepo.deleteUser();
-    }
     emit(CancelState());
   }
 
@@ -133,81 +129,84 @@ class EditBloc extends Bloc<EditEvent, EditState> {
     }
   }
 
-  Future<void> _EditUserEvent(EditUserEvent event, Emitter emit) async {
-    //   final lastName = event.lastName;
-    //   final firstName = event.firstName;
-    //  // final name = event.name;
-    //   final phone = event.phone;
-    //   final email = event.email;
-    //   final password = event.password;
-    //   final birthday = event.birthday;
-    //   final user = event.user;
+  Future<void> _SaveUserEvent(SaveUserEvent event, Emitter emit) async {
+    final lastName = event.lastName;
+    final firstName = event.firstName;
+    final name = event.name;
+    final phone = event.phone;
+    final email = event.email;
+    final password = event.password;
+    final birthday = event.birthday;
+    final user = event.user;
 
-    // lastName.isNotEmpty
-    //     ? {
-    //         if (validRepo.lastNameValidation(lastName))
-    //           {user.lastName = lastName}
-    //       }
-    //     : null;
+    lastName!.isNotEmpty
+        ? {
+            if (validRepo.lastNameValidation(lastName))
+              {user.lastName = lastName}
+          }
+        : null;
 
-    // firstName.isNotEmpty
-    //     ? {
-    //         if (validRepo.firstNameValidation(firstName))
-    //           {user.firstName = firstName}
-    //       }
-    //     : null;
-    // name.isNotEmpty
-    //     ? {
-    //         if (validRepo.nameValidation(name))
-    //           {
-    //             if (await apiRepo.checkName(name).)
-    //               {
-    //                 user.name = name,
-    //               }
-    //           }
-    //       }
-    //     : null;
-    // phone.isNotEmpty
-    //     ? {
-    //         if (validRepo.phoneValidation(phone))
-    //           {
-    //             if (await apiRepo.checkPhone(phone)) {user.phone = phone}
-    //           }
-    //       }
-    //     : null;
-    // email.isNotEmpty
-    //     ? {
-    //         if (validRepo.emailValidation(email))
-    //           {
-    //             if (await apiRepo.checkEmail(email)) {user.email = email}
-    //           }
-    //       }
-    //     : null;
-    // password.isNotEmpty
-    //     ? {
-    //         if (validRepo.passwordValidation(password))
-    //           {user.password = password}
-    //       }
-    //     : null;
-    // birthday.toString().isNotEmpty
-    //     ? {
-    //         if (validRepo.birthdayValidation(DateTime.parse(birthday)))
-    //           {user.birthday = DateTime.parse(birthday)}
-    //       }
-    //     : null;
+    firstName!.isNotEmpty
+        ? {
+            if (validRepo.firstNameValidation(firstName))
+              {user.firstName = firstName}
+          }
+        : null;
+    name!.isNotEmpty
+        ? {
+            if (validRepo.nameValidation(name))
+              {
+                resModel = await apiRepo.checkName(name),
+                if (resModel?.statusCode == 200)
+                  {
+                    user.name = name,
+                  }
+              }
+          }
+        : null;
+    phone!.isNotEmpty
+        ? {
+            if (validRepo.phoneValidation(phone))
+              {
+                resModel = await apiRepo.checkPhone(phone),
+                if (resModel?.statusCode == 200) {user.phone = phone}
+              }
+          }
+        : null;
+    email!.isNotEmpty
+        ? {
+            if (validRepo.emailValidation(email))
+              {
+                resModel = await apiRepo.checkEmail(email),
+                if (resModel?.statusCode == 200) {user.email = email}
+              }
+          }
+        : null;
+    password!.isNotEmpty
+        ? {
+            if (validRepo.passwordValidation(password))
+              {user.password = password}
+          }
+        : null;
+    birthday.toString().isNotEmpty
+        ? {
+            if (validRepo.birthdayValidation(DateTime.parse(birthday!)))
+              {user.birthday = DateTime.parse(birthday)}
+          }
+        : null;
 
     await apiRepo.editUer(event.user);
     await userMongoRepo.updateUser(
         event.user,
         ({
-          'naem': event.name,
-          'firstName': event.firstName,
-          'lastName': event.lastName,
-          'password': event.password,
-          'email': event.email,
-          'phone': event.phone,
-          'birthDate': event.user.birthday.toString(),
+          'naem': name,
+          'firstName': firstName,
+          'lastName': lastName,
+          'password': password,
+          'email': email,
+          'phone': phone,
+          'birthDate': user.birthday.toString(),
         }));
-    emit(EditUserState(user: event.user));
+    emit(SaveUserState(user: user));
   }
 }

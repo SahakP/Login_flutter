@@ -30,8 +30,8 @@ class _EmailOrPhoneState extends State<EmailOrPhone> {
 
   bool isEmailValid = false;
   bool isPhoneValid = false;
-  Country? _selectedCountry;
   bool isLoading = false;
+  Country? _selectedCountry;
 
   MyChangeNotifier get changeNotif =>
       Provider.of<MyChangeNotifier>(context, listen: false);
@@ -79,7 +79,7 @@ class _EmailOrPhoneState extends State<EmailOrPhone> {
               _renderSignUpWithPhone(),
               _renderEmailTF(),
               _renderEmailErrorMsg(),
-              _emailButton(),
+              _renderEmailButton(),
             ],
           ),
         ])));
@@ -100,7 +100,7 @@ class _EmailOrPhoneState extends State<EmailOrPhone> {
               _renderSignUpToEmail(),
               _renderPhoneLabelText(),
               _renderNumberInput(),
-              _lineContainer(),
+              _renderLineContainer(),
               _renderPhoneErrorMsg(),
               _renderPhoneTextUnder(),
               _phoneNumberButton(),
@@ -110,11 +110,6 @@ class _EmailOrPhoneState extends State<EmailOrPhone> {
   }
 
   Widget _renderNumberInput() {
-    //return
-    // ValueListenableBuilder<Country>(
-    //     valueListenable: valueNotif,
-    //     builder: (context, value, child) {
-
     return Row(mainAxisAlignment: MainAxisAlignment.start, children: [
       Expanded(
           child: Align(
@@ -152,9 +147,7 @@ class _EmailOrPhoneState extends State<EmailOrPhone> {
           },
           style: const TextStyle(
               color: Colors.black, fontWeight: FontWeight.bold, fontSize: 12),
-          decoration: InputDecoration(labelText: 'EMAIL'.i18n()
-              //MyLocalizations.of(context)!.EMAIL!,
-              ),
+          decoration: InputDecoration(labelText: 'EMAIL'.i18n()),
         ));
   }
 
@@ -265,11 +258,6 @@ class _EmailOrPhoneState extends State<EmailOrPhone> {
                     child: CountryList(
                       //valueNotif: changeNotif,
                       countriesList: _countries,
-                      // country: (Country country) {
-                      //   setState(() {
-                      //     _selectedCountry = country;
-                      //   });
-                      // },
                     ))));
       },
       child: isLoading ? Text(flagMaker()) : const CupertinoActivityIndicator(),
@@ -289,7 +277,7 @@ class _EmailOrPhoneState extends State<EmailOrPhone> {
     return flag + ' +' + country.countryPhoneCode;
   }
 
-  Widget _lineContainer() {
+  Widget _renderLineContainer() {
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 40),
         child: Container(
@@ -308,15 +296,15 @@ class _EmailOrPhoneState extends State<EmailOrPhone> {
         onTap: () {
           isPhoneValid && isLoading
               ? {
+                  widget.user.phone = _selectedCountry!.countryPhoneCode +
+                      ' ' +
+                      controllerPhoneNumber.text,
+                  widget.user.email = '',
                   Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              UsernameScreen(users: widget.user))),
-                  widget.user.phone = _selectedCountry!.countryPhoneCode +
-                      ' ' +
-                      controllerPhoneNumber.text,
-                  widget.user.email = ''
+                              UsernameScreen(users: widget.user)))
                 }
               : null;
         },
@@ -329,7 +317,7 @@ class _EmailOrPhoneState extends State<EmailOrPhone> {
     setState(() {});
   }
 
-  Widget _emailButton() {
+  Widget _renderEmailButton() {
     return Expanded(
         child: Align(
       alignment: FractionalOffset.bottomCenter,
@@ -337,15 +325,17 @@ class _EmailOrPhoneState extends State<EmailOrPhone> {
         isActive: isEmailValid,
         title: 'Continue'.i18n(),
         onTap: () {
-          widget.user.email = controllerEmail.text;
-          widget.user.phone = '';
           isEmailValid
-              ? Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => UsernameScreen(
-                            users: widget.user,
-                          )))
+              ? {
+                  widget.user.email = controllerEmail.text,
+                  widget.user.phone = '',
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => UsernameScreen(
+                                users: widget.user,
+                              )))
+                }
               : null;
         },
       ),

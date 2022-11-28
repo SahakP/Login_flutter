@@ -32,7 +32,7 @@ class PhoneSuccessState extends EmailPhoneState {
 //****************
 
 class EmailPhoneLoadCountresState extends EmailPhoneState {
-  final Country? currentLocation;
+  Country? currentLocation;
   List<Country> countries;
   EmailPhoneLoadCountresState(
       {required this.countries, required this.currentLocation});

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:localization/localization.dart';
 import 'package:provider/provider.dart';
+import 'package:snap_chat_copy/repositiry/mongoDb/user_mongo_repo.dart';
+import 'package:snap_chat_copy/services/Api/api_repo.dart';
 import 'package:snap_chat_copy/utill/header.dart';
 
 import '../../model/user_model.dart';
@@ -21,13 +23,8 @@ class FirstPage extends StatefulWidget {
 }
 
 class _FirstPageState extends State<FirstPage> {
-  final _bloc = FirstPageBloc();
-
-  String get _validFormatDate {
-    final formatter = DateFormat('dd MMMM yyyy');
-    final birthday = formatter.format(widget.user.birthday!);
-    return birthday;
-  }
+  final _bloc =
+      FirstPageBloc(apiRepo: ApiRepo(), userMongoRepo: UserMongoRepo());
 
   @override
   Widget build(BuildContext context) {
@@ -184,7 +181,6 @@ class _FirstPageState extends State<FirstPage> {
   Widget _renderLogOutButton() {
     return IconButton(
         onPressed: () async {
-          // await RealmApp().logout();
           _bloc.add(LogoutEvent(user: widget.user));
         },
         icon: const Icon(Icons.logout_rounded));
@@ -228,6 +224,12 @@ class _FirstPageState extends State<FirstPage> {
         },
       ),
     );
+  }
+
+  String get _validFormatDate {
+    final formatter = DateFormat('dd MMMM yyyy');
+    final birthday = formatter.format(widget.user.birthday!);
+    return birthday;
   }
 }
 

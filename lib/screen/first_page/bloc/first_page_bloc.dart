@@ -9,10 +9,11 @@ part 'first_page_event.dart';
 part 'first_page_state.dart';
 
 class FirstPageBloc extends Bloc<FirstPageEvent, FirstPageState> {
-  UserMongoRepo userRepo = UserMongoRepo();
-  ApiRepo apiRepo = ApiRepo();
+  UserMongoRepo userMongoRepo;
+  ApiRepo apiRepo;
 
-  FirstPageBloc() : super(FirstPageInitial()) {
+  FirstPageBloc({required this.apiRepo, required this.userMongoRepo})
+      : super(FirstPageInitial()) {
     on<LogoutEvent>(_LogoutEvent);
     on<GoEditeEvent>(_EditeEvent);
     on<DeleteEvent>(_DeleteEvent);
@@ -35,7 +36,7 @@ class FirstPageBloc extends Bloc<FirstPageEvent, FirstPageState> {
     user = await apiRepo.getUser();
     if (user != null) {
       await apiRepo.deleteUser();
-      await userRepo.deleteUser(user);
+      await userMongoRepo.deleteUser(user);
       tokenPref.remove('token');
       //await RealmApp().logout();
     }

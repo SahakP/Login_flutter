@@ -18,7 +18,7 @@ class StartBloc extends Bloc<StartEvent, StartState> {
 
     if (token != null) {
       final user = await ApiRepo().getUser();
-      emit(IsRegState(isReg: true, user: user));
+      emit(RegistratedState(user: user));
     } else {
       emit(NoUserState());
     }

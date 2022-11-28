@@ -6,18 +6,15 @@ import '../../model/user_model.dart';
 
 class UserMongoService {
   final MongoRealmClient client = MongoRealmClient();
-  //final RealmApp app = RealmApp();
 
   Future<void> insertData(User user) async {
     final tokenPref = await SharedPreferences.getInstance();
     final realmToken = tokenPref.getString('realmToken')!;
-
+    await RealmApp.init('application-0-tbwaj');
     await RealmApp().login(Credentials.jwt(realmToken));
 
     final collection = client.getDatabase('myDb').getCollection('users');
-
     final document = MongoDocument(user.toMap());
-
     await collection.insertMany([document]);
   }
 

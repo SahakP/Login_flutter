@@ -41,12 +41,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
   // }
 
   final _bloc = SignUpBloc(validRepo: ValidationRepo());
-  var expMsg = ExpMap().expMsg;
+  Map<String, String> expMsg = ExpMap().expMsg;
   bool firstNameValid = false;
   bool lastNaemValid = false;
 
-  final controllerFirstName = TextEditingController();
-  final controllerLastName = TextEditingController();
+  TextEditingController controllerFirstName = TextEditingController();
+  TextEditingController controllerLastName = TextEditingController();
 
   User user = User();
 
@@ -213,20 +213,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => BirthdayScreen(user: user)));
+                    builder: (context) => BirthdayScreen(user: user!)));
           }
         },
       ),
     ));
   }
-
-  // bool get _firstNameValidation {
-  //   return controllerFirstName.text.isNotEmpty;
-  // }
-
-  // bool get _lastNameValidation {
-  //   return controllerLastName.text.isNotEmpty;
-  // }
 
   bool get _isActive {
     if (firstNameValid && lastNaemValid) {

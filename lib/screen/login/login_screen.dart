@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:localization/localization.dart';
+import 'package:snap_chat_copy/repositiry/mongoDb/user_mongo_repo.dart';
 import 'package:snap_chat_copy/repositiry/validation/validation_repository.dart';
+import 'package:snap_chat_copy/services/Api/api_repo.dart';
 import 'package:snap_chat_copy/utill/back_button.dart';
 import 'package:snap_chat_copy/utill/header.dart';
 import 'package:snap_chat_copy/utill/un_focused.dart';
@@ -19,7 +21,10 @@ class LoginScren extends StatefulWidget {
 }
 
 class _LoginScrenState extends State<LoginScren> {
-  final _bloc = LoginBloc(validRepo: ValidationRepo());
+  final _bloc = LoginBloc(
+      validRepo: ValidationRepo(),
+      apiRepo: ApiRepo(),
+      userMongoRepo: UserMongoRepo());
 
   TextEditingController controllerPassword = TextEditingController();
 
@@ -27,9 +32,8 @@ class _LoginScrenState extends State<LoginScren> {
 
   bool _isNameValid = false;
   bool _isPasswordValid = false;
-  var expMsg = ExpMap().expMsg;
-
   bool isLoginButtonActive = false;
+  Map<String, String> expMsg = ExpMap().expMsg;
 
   @override
   void initState() {
@@ -49,7 +53,6 @@ class _LoginScrenState extends State<LoginScren> {
   }
 
   Widget _render(BuildContext context, LoginState state) {
-    // MyLocalizations? localization = MyLocalizations.of(context);
     return Scaffold(
         resizeToAvoidBottomInset: true,
         backgroundColor: Colors.white,
@@ -106,7 +109,6 @@ class _LoginScrenState extends State<LoginScren> {
           ),
           child: Text(
             !_isNameValid ? 'usernaemErrorMsg'.i18n() : '',
-            //MyLocalizations.of(context)!.usernaemErrorMsg!,
             style: const TextStyle(
                 color: Color.fromARGB(255, 185, 193, 199),
                 fontWeight: FontWeight.w700,
@@ -132,7 +134,6 @@ class _LoginScrenState extends State<LoginScren> {
             color: Colors.black, fontWeight: FontWeight.w700, fontSize: 12),
         decoration: InputDecoration(
             labelText: 'password'.i18n(),
-            //MyLocalizations.of(context)!.password,
             suffixIcon: const Icon(Icons.visibility_off_sharp),
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 0, vertical: 10)),
@@ -141,25 +142,23 @@ class _LoginScrenState extends State<LoginScren> {
   }
 
   Widget _renderPasswordErrorMsg() {
-    if (!_isPasswordValid) {
-      return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-        Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 40,
-              vertical: 4,
-            ),
-            child: Text(
-              'passwordErrorMsg'.i18n(),
-              // MyLocalizations.of(context)!.passwordErrorMsg!,
-              style: const TextStyle(
-                  color: Color.fromARGB(255, 185, 193, 199),
-                  fontWeight: FontWeight.w700,
-                  fontSize: 12),
-            ))
-      ]);
-    } else {
-      return const Text('');
-    }
+    return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+      Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 40,
+          vertical: 4,
+        ),
+        child: !_isPasswordValid
+            ? Text(
+                'passwordErrorMsg'.i18n(),
+                style: const TextStyle(
+                    color: Color.fromARGB(255, 185, 193, 199),
+                    fontWeight: FontWeight.w700,
+                    fontSize: 12),
+              )
+            : const Text(''),
+      )
+    ]);
   }
 
   Widget _renderLink() {
@@ -167,7 +166,6 @@ class _LoginScrenState extends State<LoginScren> {
         onPressed: () {},
         child: Text(
           'forgotYourPassword'.i18n(),
-          //MyLocalizations.of(context)!.forgotYourPassword!,
           style: const TextStyle(
               color: Color.fromARGB(255, 21, 126, 251), fontSize: 12),
         ));

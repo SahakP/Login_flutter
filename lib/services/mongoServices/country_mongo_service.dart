@@ -20,11 +20,6 @@ class CountryMongoService {
 
   Future<List<Country>> getCountries() async {
     final countriesList = <Country>[];
-    // final tokenPref = await SharedPreferences.getInstance();
-    //final realmToken = tokenPref.getString('realmToken')!;
-
-    // await RealmApp().login(Credentials.jwt(realmToken));
-
     final collection = client.getDatabase('myDb').getCollection('countries');
     final mongoDocs = await collection.find();
 

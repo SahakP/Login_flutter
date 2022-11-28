@@ -5,7 +5,7 @@ part 'sign_up_event.dart';
 part 'sign_up_state.dart';
 
 class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
-  ValidationRepo validRepo = ValidationRepo();
+  ValidationRepo validRepo;
   SignUpBloc({required this.validRepo}) : super(SignUpInitial()) {
     on<FirstNameEvent>(_onFirstNameEvent);
     on<LastNameEvent>(_onLastNameEvent);

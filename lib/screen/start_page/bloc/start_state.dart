@@ -4,10 +4,9 @@ abstract class StartState {}
 
 class StartInitial extends StartState {}
 
-class IsRegState extends StartState {
-  final bool isReg;
+class RegistratedState extends StartState {
   User? user;
-  IsRegState({required this.isReg, required this.user});
+  RegistratedState({required this.user});
 }
 
 class NoUserState extends StartState {}

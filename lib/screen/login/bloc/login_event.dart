@@ -3,8 +3,8 @@ part of 'login_bloc.dart';
 abstract class LoginEvent {}
 
 class LogInButtonEvent extends LoginEvent {
-  final String userName;
-  final String password;
+  String userName;
+  String password;
   LogInButtonEvent({required this.userName, required this.password});
 }
 

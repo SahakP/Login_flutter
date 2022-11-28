@@ -9,7 +9,7 @@ import '../../utill/constant.dart';
 
 class ApiRepo {
   Future<List<Country>> loadCountries() async {
-    var _countries = <Country>[];
+    List<Country>? _countries;
     final response = await http
         .get(Uri.parse('https://parentstree-server.herokuapp.com/countries'));
 
@@ -17,18 +17,18 @@ class ApiRepo {
       final countriesJson = jsonDecode(response.body)['countries'] as List;
       _countries = countriesJson.map((e) => Country.fromJson(e)).toList();
     }
-    return _countries;
+    return _countries!;
   }
 
   Future<Country> loadLocation() async {
     final countryList = await loadCountries();
-    var currentCountry = '';
+    String? currentCountry;
     final locale = await http.get(Uri.parse('http://ip-api.com/json'));
     if (locale.statusCode == 200) {
       currentCountry = json.decode(locale.body)['countryCode'].toString();
     }
     final userLocation = countryList.firstWhere(
-        (Country country) => country.countryName.contains(currentCountry));
+        (Country country) => country.countryName.contains(currentCountry!));
     return userLocation;
   }
 

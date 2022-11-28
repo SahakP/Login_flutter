@@ -2,7 +2,7 @@ part of 'edit_bloc.dart';
 
 abstract class EditEvent {}
 
-class EditUserEvent extends EditEvent {
+class SaveUserEvent extends EditEvent {
   String? lastName;
   String? firstName;
   String? phone;
@@ -12,7 +12,7 @@ class EditUserEvent extends EditEvent {
   String? birthday;
   User user;
 
-  EditUserEvent(
+  SaveUserEvent(
       {required this.lastName,
       required this.phone,
       required this.name,
@@ -30,8 +30,6 @@ class BirthdayEvent extends EditEvent {
     required this.birthday,
   });
 }
-
-//class BackUserEditEvent extends EditEvent {}
 
 class LastNameEvent extends EditEvent {
   String? lastName;

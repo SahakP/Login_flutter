@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    LocalJsonLocalization.delegate.directories = ['i18n'];
+    LocalJsonLocalization.delegate.directories = ['assets/locales'];
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
