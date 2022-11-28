@@ -213,7 +213,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => BirthdayScreen(user: user!)));
+                    builder: (context) => BirthdayScreen(user: user)));
           }
         },
       ),
