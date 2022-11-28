@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:localization/localization.dart';
 import 'package:snap_chat_copy/repositiry/mongoDb/user_mongo_repo.dart';
 import 'package:snap_chat_copy/repositiry/validation/validation_repository.dart';
-import 'package:snap_chat_copy/services/Api/api_repo.dart';
+import 'package:snap_chat_copy/repositiry/Api/api_repo.dart';
 import 'package:snap_chat_copy/utill/back_button.dart';
 import 'package:snap_chat_copy/utill/header.dart';
 import 'package:snap_chat_copy/utill/un_focused.dart';

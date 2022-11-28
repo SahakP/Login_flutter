@@ -1,7 +1,7 @@
 import 'package:snap_chat_copy/services/mongoServices/country_mongo_service.dart';
 
 import '../../model/country_model.dart';
-import '../../services/Api/api_repo.dart';
+import '../Api/api_repo.dart';
 
 class CountryMongoRepo {
   CountryMongoService countryMongoService = CountryMongoService();

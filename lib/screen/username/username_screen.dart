@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:localization/localization.dart';
 import 'package:snap_chat_copy/repositiry/validation/validation_repository.dart';
 import 'package:snap_chat_copy/screen/username/bloc/username_bloc.dart';
-import 'package:snap_chat_copy/services/Api/api_repo.dart';
+import 'package:snap_chat_copy/repositiry/Api/api_repo.dart';
 import 'package:snap_chat_copy/utill/back_button.dart';
 import 'package:snap_chat_copy/utill/button_submit.dart';
 import 'package:snap_chat_copy/utill/header.dart';

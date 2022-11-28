@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:snap_chat_copy/model/country_model.dart';
 import 'package:snap_chat_copy/repositiry/validation/validation_repository.dart';
-import 'package:snap_chat_copy/services/Api/api_repo.dart';
+import 'package:snap_chat_copy/repositiry/Api/api_repo.dart';
 
 import '../../../model/response_model.dart';
 import '../../../utill/exepshon_map.dart';

@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:localization/localization.dart';
 import 'package:provider/provider.dart';
 import 'package:snap_chat_copy/repositiry/mongoDb/user_mongo_repo.dart';
-import 'package:snap_chat_copy/services/Api/api_repo.dart';
+import 'package:snap_chat_copy/repositiry/Api/api_repo.dart';
 import 'package:snap_chat_copy/utill/header.dart';
 
 import '../../model/user_model.dart';

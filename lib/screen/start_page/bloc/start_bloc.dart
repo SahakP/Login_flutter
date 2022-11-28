@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:snap_chat_copy/services/Api/api_repo.dart';
+import 'package:snap_chat_copy/repositiry/Api/api_repo.dart';
 
 import '../../../model/user_model.dart';
 

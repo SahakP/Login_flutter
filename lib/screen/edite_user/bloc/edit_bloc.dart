@@ -7,7 +7,7 @@ import '../../../model/country_model.dart';
 import '../../../model/response_model.dart';
 import '../../../repositiry/mongoDb/country_mongo_repo.dart';
 import '../../../repositiry/mongoDb/user_mongo_repo.dart';
-import '../../../services/Api/api_repo.dart';
+import '../../../repositiry/Api/api_repo.dart';
 
 part 'edit_event.dart';
 part 'edit_state.dart';

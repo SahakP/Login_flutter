@@ -5,7 +5,7 @@ import 'package:localization/localization.dart';
 import 'package:provider/provider.dart';
 import 'package:snap_chat_copy/model/country_model.dart';
 import 'package:snap_chat_copy/repositiry/validation/validation_repository.dart';
-import 'package:snap_chat_copy/services/Api/api_repo.dart';
+import 'package:snap_chat_copy/repositiry/Api/api_repo.dart';
 import 'package:snap_chat_copy/utill/back_button.dart' show BackBtn;
 import 'package:snap_chat_copy/utill/button_submit.dart';
 import 'package:snap_chat_copy/utill/country_list.dart';
